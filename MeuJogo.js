@@ -215,7 +215,7 @@ class MeuJogo extends Phaser.Scene {
 
     // evento que gera obstáculos de forma periódica
      this.eventoObstaculos = this.time.addEvent({
-     delay: 3300,
+     delay: 2800,
      callback: this.gerarObstaculo,
      callbackScope: this,
      loop: true
@@ -496,7 +496,7 @@ class MeuJogo extends Phaser.Scene {
       { q: 'Calcule a média de 7, 8 e 9?', a: '8' },
       { q: 'Um retângulo tem perímetro 24 e base 7. Qual a altura?', a: '5' },
       { q: 'Qual a da raiz cúbica de 27?', a: '3' },
-      { q: 'Se 3/4 de uma pizza foi comida, qual a fração que sobra ?', a: '1/4' },
+      { q: 'Se 3/4 de uma pizza foi comida, quantos pedaços de pizza sobram ?', a: '1' },
       { q: 'Quantos minutos tem meia hora?', a: '30' },
       { q: 'Qual é o número primo seguinte a 7?', a: '11' },
       { q: 'Em uma sala com 20 alunos, 5 estavam ausentes. Qual a porcentagem dos alunos presentes ?', a: '75' },
@@ -504,7 +504,7 @@ class MeuJogo extends Phaser.Scene {
       { q: 'Se um quadrado tem lado 9, qual seu perímetro?', a: '36' },
       { q: 'Qual é o valor de 15 - 7 + 3?', a: '11' },
       { q: 'Um telefone custa 100 e tem desconto de 15%. Qual o preço final?', a: '85' },
-      { q: 'Se a velocidade de um carro é 90km/h, quantos km percorre em 2 horas?', a: '180', a:'180km'},
+      { q: 'Se a velocidade de um carro é 90km/h, quantos km percorre em 2 horas?', a: '180', a:'180'},
       { q: 'Qual a área de um triângulo com base 10 e altura 6?', a: '30' },
       { q: 'Qual o resultado de 8 × 7?', a: '56' },
       { q: 'Se um triângulo tem dois catetos 5 e 12, qual a hipotenuza se esse triangulo for retângulo?', a: '13' },
@@ -517,7 +517,7 @@ class MeuJogo extends Phaser.Scene {
       { q: 'Um PENTÁGONO,é um polígono com quantos lados?', a: '5' },
       { q: 'Resolva: 2(x - 3) = 8', a: '7' },
       { q: 'Qual a área de um quadrado com lado 11?', a: '121' },
-      { q: 'Qual a fração que corresponde a 50% (arredonde)?', a: '1/2' },
+      { q: 'Qual a porcentágem que corresponde a fração 1/2?', a: '50' },
       { q: 'Um pacote tem 24 balas e é dividido entre 6 crianças igualmente. Quantas balas cada uma recebe?', a: '4' },
       { q: 'Qual a raiz quadrada de 100?', a: '10' },
       { q: 'Qual o valor de 3x se x=4?', a: '12' },
@@ -632,7 +632,7 @@ class MeuJogo extends Phaser.Scene {
      this.respostaText.setAlpha(0);
 
     // --- TEMPORIZADORES e LÓGICA DE PERGUNTAS ---
-     this.tempoResposta = 25000; // 25s para responder
+     this.tempoResposta = 20000; // 20s para responder
      this.tempoPausa = 7000;    // 6s de pausa entre perguntas
      this.timerPergunta = null;
      this.perguntaAtiva = false;
@@ -1196,3 +1196,4 @@ class MeuJogo extends Phaser.Scene {
 
 
 } // FIM DA CENA
+
