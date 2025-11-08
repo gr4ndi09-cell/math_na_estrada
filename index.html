@@ -4,21 +4,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Math na Estrada</title>
-    <script src="https://cdn.jsdelivr.net/npm/phaser@3.80.0/dist/phaser.min.js"></script>
- 
-    <script src='MeuJogo.js'></script>
-    <style>
-        body {
-            margin: 0;
-            overflow: hidden;
-            background: #000;
-        }
-    </style>
-</head>
-<body>
-    // FINAL DO index.html
+    <script src="phaser.min.js"></script>
+    <script src="CenaPreload.js"></script>
+    <script src="CenaTitulo.js"></script>
+    <script src="MeuJogo.js"></script>
+    
 
-<script>
+
+   <script>
     // A lista de cenas DEVE ser um array (colchetes)
     const config = {
         type: Phaser.AUTO,
@@ -26,11 +19,7 @@
         height: 1080,
         physics: { default: 'arcade', arcade: { debug: false } },
         scale: { mode: Phaser.Scale.FIT, autoCenter: Phaser.Scale.CENTER_BOTH },
-        
-        // 🔥 CORREÇÃO CRÍTICA: Use um ARRAY para as classes
-        scene: [ MeuJogo]
+        scene: [CenaPreload, CenaTitulo, MeuJogo]
     };
     const game = new Phaser.Game(config);
-</script>
-</body>
-</html>
+    </script>

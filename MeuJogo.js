@@ -11,76 +11,6 @@ class MeuJogo extends Phaser.Scene {
   
   }
 
-  
-  // CARREGAMENTO DE IMAGENS E SOM 
-  preload() {
-  
-    // --- 1. CONFIGURAÇÃO DA BARRA DE CARREGAMENTO ---
-   let progressBar = this.add.graphics();
-   let progressBox = this.add.graphics();
-   progressBox.fillStyle(0xffffff, 0.8);
-   progressBox.fillRect(470, 500, 980, 50);
-
-   // ... código de texto e porcentagem ...
-        
-   this.load.on('progress', function (value) {// ... código de atualização da barra ...
-    });
-        
-    this.load.on('complete', function () {   // ... código para destruir a barra ...
-    });
-
-    // --- 2. CARREGAMENTO DE ASSETS ---
-        
-    // IMAGENS DE CENÁRIO E HUD
-    
-    this.load.image('intro_bg', 'assets/intro_bg.png'); // Para a tela INTRO
-    this.load.image('fundo', 'assets/fundo.png');
-    this.load.image('paisagem', 'assets/faixa.png');
-    this.load.image('estrada', 'assets/estrada.png');
-    this.load.image('moldura', 'assets/moldura.png');
-    this.load.image('lousa', 'assets/lousa.png');
-    this.load.image('cerca', 'assets/cerca.png');
-    this.load.image('gameover_screen', 'assets/gameover_screen.png');
-    this.load.image('restart', 'assets/restart.png');
-    this.load.image('creditos', 'assets/creditos.png');
-    this.load.image('tela_creditos', 'assets/banner.jpg');
-    this.load.image('vitoria', 'assets/vitoria.png');
-    this.load.image('pontos', 'assets/pontos.png');
-    
-
-    // SPRITESHEETS
-   this.load.spritesheet('carro', 'assets/carro.png', {
-    frameWidth: 476,
-    frameHeight: 276
-  });
-   this.load.spritesheet('professor', 'assets/professor.png', {
-    frameWidth: 450,
-    frameHeight: 450
-  });
-    this.load.spritesheet('motorista', 'assets/moto.png', {
-    frameWidth: 450,
-    frameHeight: 450
-  });
-        
-    // OBSTÁCULOS (10 TIPOS) - Usando suas chaves e nomes confirmados
-    for (let i = 1; i <= 4; i++) {
-    this.load.image(`obs_estatico${i}`, `assets/obstaculos/estatico${i}.png`);
-    }
-    for (let i = 1; i <= 3; i++) {
-    this.load.image(`obs_dinamico${i}`, `assets/obstaculos/dinamico${i}.png`);
-    this.load.image(`obs_retro${i}`, `assets/obstaculos/retro${i}.png`);
-    }
-
-    // ÁUDIOS DE FUNDO E SFX (Sem a lógica de 2s que causava o crash)
-    this.load.audio('bgmusic', ['assets/audio/bgmusic.mp3', 'assets/audio/bgmusic.ogg']);
-    this.load.audio('motorsound', ['assets/audio/motorsound.mp3', 'assets/audio/motorsound.ogg']);
-    this.load.audio('sfx_acerto', ['assets/audio/sfx_acerto.mp3', 'assets/audio/sfx_acerto.ogg']); 
-    this.load.audio('sfx_erro', ['assets/audio/sfx_erro.mp3', 'assets/audio/sfx_erro.ogg']);
-    this.load.audio('sfx_colisao', ['assets/audio/sfx_colisao.mp3', 'assets/audio/sfx_colisao.ogg']);
-    this.load.audio('audio_vitoria', ['assets/audio/audio_vitoria.mp3', 'assets/audio/audio_vitoria.ogg']);
-    
-    // FIM DO PRELOAD
-  }
 
     // --- FUNÇÕES AUXILIARES DE ESTADO ---
   mudarEstado(novoEstado) {
@@ -89,6 +19,8 @@ class MeuJogo extends Phaser.Scene {
     const isPlaying = novoEstado === 'JOGANDO';
         
       if (this.introGroup) this.introGroup.setVisible(novoEstado === 'INTRO');
+
+      
       if (this.gameOverGroup) this.gameOverGroup.setVisible(novoEstado === 'GAMEOVER');
         
       if (this.car && this.car.body) {
@@ -119,6 +51,7 @@ class MeuJogo extends Phaser.Scene {
       .setOrigin(0.5)
       .setDepth(100)
       .setDisplaySize(this.scale.width, this.scale.height);
+      this.time.paused = true;
 
       // Adiciona botões de controle (Exemplo)
       const centerX = this.scale.width / 2;
@@ -152,7 +85,7 @@ class MeuJogo extends Phaser.Scene {
       this.tweens.add({
       targets: creditosImg,
       y: destinoY,
-      duration: 30000,
+      duration: 40000,
       ease: 'Linear',
       onComplete: () => {
       overlay.destroy(); // remove o fundo quando acabar
@@ -170,12 +103,12 @@ class MeuJogo extends Phaser.Scene {
       
   }
        
-  toggleHUD = (mostrar) => {
-   const alvoAlpha = mostrar ? 1 : 0;
-   const targets = [this.hud, this.professor, this.motorista, this.vidaText, this.lousa, this.perguntaText, this.respostaText];
-   const validTargets = targets.filter(t => t);
-   this.tweens.add({ targets: validTargets, alpha: alvoAlpha, duration: 700, ease: 'Sine.easeInOut' });
-  };
+  // toggleHUD = (mostrar) => {
+  //  const alvoAlpha = mostrar ? 1 : 0;
+  //  const targets = [this.hud, this.professor, this.motorista, this.vidaText, this.lousa, this.perguntaText, this.respostaText];
+  //  const validTargets = targets.filter(t => t);
+  //  this.tweens.add({ targets: validTargets, alpha: alvoAlpha, duration: 700, ease: 'Sine.easeInOut' });
+  // };
 
     
   //INICIO DO CREATE
@@ -192,24 +125,16 @@ class MeuJogo extends Phaser.Scene {
      this.combo = 0; // acertos consecutivos
      this.tempoSemColisao = 0;
 
-    // // Exibe a pontuação no canto superior direito
-    //  this.scoreText = this.add.text(1820, 40, 'Pontos: 0', {
-    //  fontSize: '36px',
-    //  color: '#ffffff',
-    //  fontStyle: 'bold',
-    //  stroke: '#000000',
-    //  strokeThickness: 4
-    // }).setOrigin(1, 0).setDepth(50);
-
+   
     // === HUD DE PONTUAÇÃO ===
 
     // Fundo da pontuação
-     this.pontosFundo = this.add.image(960, 85, 'pontos') // centralizado no topo
+     this.pontosFundo = this.add.image(960, 80, 'pontos') // centralizado no topo
      .setOrigin(0.5)
      .setDepth(100); // acima da pista e do carro
 
    // Texto da pontuação sobre o fundo
-     this.scoreText = this.add.text(960, 85, 'Pontos: 0', {
+     this.scoreText = this.add.text(960, 80, 'Pontos: 0', {
      fontSize: '40px',
      fontFamily: 'Arial Black',
      color: '#ffffff',
@@ -290,7 +215,7 @@ class MeuJogo extends Phaser.Scene {
 
     // evento que gera obstáculos de forma periódica
      this.eventoObstaculos = this.time.addEvent({
-     delay: 2500,
+     delay: 3300,
      callback: this.gerarObstaculo,
      callbackScope: this,
      loop: true
@@ -507,14 +432,15 @@ class MeuJogo extends Phaser.Scene {
       this.respostaText = this.add.text(lousaX, lousaY + 150, '', {
       fontSize: '40px',
       color: '#aeee9dff',
-      backgroundColor: '#000000b0',
+      fontFamily: 'Arial',
+      backgroundColor: '#00000002',
       padding: { x: 30, y: 30 },
       align: 'center'
     }).setOrigin(0.5).setDepth(23);
 
     // --- LISTA DE PEERGUNTAS ---
       this.perguntas = [
-        // as perguntas adicionadas seguem esse padrão elementar ' {q: 'pergunta', a: 'resposta'}, '
+        // as perguntas adicionais devem seguir esse padrão elementar ' {q: 'pergunta', a: 'resposta'}, '
       { q: 'Quanto vale, 5 + 3 = ?', a: '8' },
       { q: 'quanto vale, 4 x 4 = ?', a: '16'},
       { q: 'Quanto vale, 5 x 5 = ?', a: '25'},
@@ -523,30 +449,110 @@ class MeuJogo extends Phaser.Scene {
       { q: 'Quanto vale, 8 x 8 = ?', a: '64'},
       { q: 'Quanto vale, 9 x 9 = ?', a: '81'},
       { q: 'Quanto vale, 3 x 3 = ?', a: '9'},
+      { q: 'Um carro percorre 60 km em 2 horas. Qual a velocidade média?', a: '30' },
+      { q: 'Se um triângulo tem lados 3, 4 e 5, qual é o perímetro?', a: '12' },
+      { q: 'Uma caixa contém 12 maçãs. João comeu 4. Quantas maçãs sobraram?', a: '8' },
+      { q: 'Qual é a área de um retângulo de base 5 e altura 3?', a: '15' },
+      { q: 'Uma fábrica produz 150 peças em 5 horas. Quantas peças produz em 1 hora?', a: '30' },
+      { q: 'Resolva para x: 3x + 5 = 20', a: '5' },
+      { q: 'Se um número aumentado de 7 dá 15, qual é esse número?', a: '8' },
+      { q: 'Qual o valor de 25% de 80?', a: '20' },
+      { q: 'Qual a média entre os números 10, 12 e 14?', a: '12' },
+      { q: 'Qual é o resultado de 4² + 2²?', a: '20' },
+      { q: 'A soma de dois números é 30, um é 18. Qual o outro?', a: '12' },
+      { q: 'Se 5x = 35, qual o valor de x?', a: '7' },
+      { q: 'Qual é o menor número primo?', a: '2' },
+      { q: 'Um ângulo reto mede quantos graus?', a: '90' },
+      { q: 'Se um livro custa 20 e está com 10% de desconto, qual o preço final?', a: '18' },
+      { q: 'Qual o número inverso de 1/5 ?', a: '5' },
+      { q: 'A área de um quadrado é 49. Qual o lado do quadrado?', a: '7' },
+      { q: 'Qual o valor de  x em : 2x - 7 = 9', a: '8' },
+      { q: 'Se um tanque tem 100 litros e está cheio até 75%, quantos litros tem?', a: '75' },
+      { q: 'Qual o resultado de √81?', a: '9' },
+      { q: 'Quanto é 20% de 50?', a: '10' },
+      { q: 'Um triângulo tem um ângulo de 50º e outro de 60º. Qual o terceiro?', a: '70' },
+      { q: 'Qual o perímetro de um quadrado com lado 10?', a: '40' },
+      { q: 'Se uma passagem custa 15 e você tem 50, quantas passagens pode comprar?', a: '3' },
+      { q: 'Qual a fração que representa 25% (arredonde resposta)?', a: '1/4' },
+      { q: 'Qual é o resultado da expressão: 10 - (2 + 3)?', a: '5' },
+      { q: 'Que número multiplicado por 6 dá 42?', a: '7' },
+      { q: 'Se um ângulo mede 135º, é ( 1 ) agudo, ( 2 ) reto ou ( 3 ) obtuso?', a: '3' },
+      { q: 'Quantos segundos tem 3 minutos?', a: '180' },
+      { q: 'Se uma camisa custa 50 e tem 20% de desconto, qual o preço final?', a: '40' },
+      { q: 'Qual a fração equivalente a 0,75 (arredonde)?', a: '1' },
+      { q: 'Um triângulo retângulo tem catetos 6 e 8. Qual a hipotenusa?', a: '10' },
+      { q: 'Qual o número de lados de um hexágono?', a: '6' },
+      { q: 'Todo número elevado ao expoente 0 é igual a ?', a: '1' },
+      { q: 'Qual o valor de x em 5x = 25?', a: '5' },
+      { q: 'Se a temperatura cai de 30 para 15, qual foi a variação?', a: '-15' },
+      { q: 'Quanto vale a soma dos ângulos internos de um triângulo?', a: '180' },
+      { q: 'Qual probabilidade em % de sair cara em um jogo de cara ou coroa ?', a: '50' },
+      { q: 'Qual o valor da área do quadrado de lado 12?', a: '144' },
+      { q: 'Quanto é 4 × 7?', a: '28' },
+      { q: 'Um aquário tem dimensões 5x4x3. Qual o volume?', a: '60' },
+      { q: 'Se um produto custa 120 e aumenta 10%, quanto passa a custar?', a: '132' },
+      { q: 'Qual a raiz quadrada de 64?', a: '8' },
+      { q: 'Em uma compra de 5 itens, cada um custa 8, qual seria o total?', a: '40' },
+      { q: 'Calcule a média de 7, 8 e 9?', a: '8' },
+      { q: 'Um retângulo tem perímetro 24 e base 7. Qual a altura?', a: '5' },
+      { q: 'Qual a da raiz cúbica de 27?', a: '3' },
+      { q: 'Se 3/4 de uma pizza foi comida, qual a fração que sobra ?', a: '1/4' },
+      { q: 'Quantos minutos tem meia hora?', a: '30' },
+      { q: 'Qual é o número primo seguinte a 7?', a: '11' },
+      { q: 'Em uma sala com 20 alunos, 5 estavam ausentes. Qual a porcentagem dos alunos presentes ?', a: '75' },
+      { q: 'Quantas diagonais tem um quadrado?', a: '2' },
+      { q: 'Se um quadrado tem lado 9, qual seu perímetro?', a: '36' },
+      { q: 'Qual é o valor de 15 - 7 + 3?', a: '11' },
+      { q: 'Um telefone custa 100 e tem desconto de 15%. Qual o preço final?', a: '85' },
+      { q: 'Se a velocidade de um carro é 90km/h, quantos km percorre em 2 horas?', a: '180', a:'180km'},
+      { q: 'Qual a área de um triângulo com base 10 e altura 6?', a: '30' },
+      { q: 'Qual o resultado de 8 × 7?', a: '56' },
+      { q: 'Se um triângulo tem dois catetos 5 e 12, qual a hipotenuza se esse triangulo for retângulo?', a: '13' },
+      { q: 'Qual o valor de 13 + 24?', a: '37' },
+      { q: 'Um número dividido por 4 é 7. Qual é o número?', a: '28' },
+      { q: 'Quanto é 10% de 50?', a: '5' },
+      { q: 'Qual o resultado da operação 9²?', a: '81' },
+      { q: 'Um círculo tem diâmetro 10. Qual o raio?', a: '5' },
+      { q: 'Qual é o menor número natural?', a: '0' },
+      { q: 'Um PENTÁGONO,é um polígono com quantos lados?', a: '5' },
+      { q: 'Resolva: 2(x - 3) = 8', a: '7' },
+      { q: 'Qual a área de um quadrado com lado 11?', a: '121' },
+      { q: 'Qual a fração que corresponde a 50% (arredonde)?', a: '1/2' },
+      { q: 'Um pacote tem 24 balas e é dividido entre 6 crianças igualmente. Quantas balas cada uma recebe?', a: '4' },
+      { q: 'Qual a raiz quadrada de 100?', a: '10' },
+      { q: 'Qual o valor de 3x se x=4?', a: '12' },
+      { q: 'Qual é o número seguinte a 99?', a: '100' },
+      { q: 'Uma loja vendeu 120 produtos em 4 dias. Qual a média diária?', a: '30' },
+      { q: 'Se aumentarmos 10% em 50, qual o novo valor?', a: '55' },
+      { q: 'Uma caixa tem 5 pacotes de arroz. Se 2 pacotes são usados, quantos sobram ?', a: '3' },
+      { q: 'Qual o valor do perímetro de um triângulo com lados 6, 7 e 8?', a: '21' },
+      { q: 'Qual o volume de um cubo de aresta 3?', a: '27' },
+      { q: 'Qual é o ângulo complementar de 40º?', a: '50' },
+      { q: 'Se x + 3 = 10, qual o valor de x?', a: '7' },
+      { q: 'Qual o valor de 5³?', a: '125' },
+      { q: 'Quanto é 100 menos 35?', a: '65' },
+      { q: 'Se um tanque tem 250 e já está com 100, quanto falta para encher?', a: '150' },
       { q: 'Quantos anagramas tem a palavra MATEMÁTICA ?', a: '7'},
+      { q: 'Pedro tem 20 anos e seu irmão caçula nasceu hoje🥰. Com que idade pedro terá o dobro da idade do irmão caçula? ', a: '40'},
       { q: 'Quanto vale 3! ?', a: '6'},
       { q: 'Quanto vale 5# ?', a: '30'},
       { q: 'Quanto vale a raiz quadrada de 36 ?', a: '6'},
-      { q: 'Uma sacola com uma dúzia de laranjas, tem quanta laranjas no total?', a: '12'},
+      { q: 'Uma sacola com uma dúzia de laranjas, contém quantas laranjas no total?', a: '12'},
       { q: 'De quantas formas diferentes podemos organizar os anagramas da palavra: SAPO ?', a: '24'},
-      { q: 'Se fosse possível pesar infinitas bolas grandes e pequenas, O que pesaria mais? ( 1 ) infinitas bolas grandes , ( 2 ) infinitas bolas pequenas , ( 3 ) teriam o mesmo peso', a: '3'},
       { q: 'Quanto vale, 10 - 4 = ?', a: '6' },
       { q: 'Quanto vale a soma dos ângulos internos de um triângulo qualquer ?', a: '180'},
-      { q: 'Quanto vale a soma dos angulos externos adjacentes de um triângulo', a: '360'},
-      { q: 'Qual a velocidade aproximada da luz em km / segundo ?', a: '300.000'},
       { q: 'Quanto vale, 7 x 2 = ?', a: '14' },
       { q: 'Quanto vale, 9 - 12 = ?', a: '-3' },
       { q: 'Quanto é log de 64 na base 8 ? Dica: leia como: Qual o expoente que transforma a base 8 em 64.', a: '2' },
       { q: 'Qual a raiz quadrada de 9 ?', a: '3' },
-      { q: 'Quando eu tinha 4 anos meu irmão tinha o dobro da minha idade. Hoje meu irmão tem 20 anos, que idade eu tenho hoje?', a: '16' },
-      { q: 'Uma compra custa 7,50. Você paga com 10 e a balconista pede 2,50 para facilitar. Quanto de troco você deve receber?', a: '5' }, // ajuste: caso queira 0 ou 0,00
+      { q: 'Quando eu tinha 4 anos a idade do meu irmão era o dobro da minha idade. Hoje meu irmão tem 20 anos, que idade eu tenho hoje?', a: '16' },
+      { q: 'Uma compra custa 7,50. Você paga com 10 e a balconista pede 2,50 para facilitar. Quanto de troco você deve receber?', a: '5' }, 
       { q: 'O pai de Maria foi passear com 3 filhas: Joana, Sofia e Andrea. Quantas filhas tem o pai de Maria?', a: '4' },
       { q: 'Quanto é log10 ? dica: quando a base for omitida, base = 10).', a: '1' },
       { q: 'Quanto vale x na equação: x/3 + 6 = 10 ?', a: '12' },
       { q: 'Quando pedro nasceu seu pai tinha 33 anos, hoje o pai de Pedro tem 40. qual idade pedro tem hoje ?', a: '7'},
       { q: 'Qual é o inverso de 1/4 ?', a: '4' },
-      { q: 'Quanto vale a Tangente de 45 graus ?', a: '1' },
-      { q: 'Quando Diana tinha 15 anos sua tia tinhano dobro de sua idade. Hoje Diana tem 30 anos, que idade tem a tia de Diana? ', a: '45'},
+      { q: 'Quando Diana completou 15 anos sua tia tinha o dobro de sua idade. Hoje Diana tem 30 anos, que idade tem hoje a tia de Diana? ', a: '45'},
       { q: 'Quanto vale, 2 - 4 = ?', a: '-2'},
       { q: 'Eu tinha 10 laranjas, vendi 1/2 por 5 cada uma. Quanto recebi?', a: '25' },
       { q: 'Em um Triângulo retângulo, se os catetos medem 6cm e 8cm. Quantos cm mede a Hipotenusa?', a: '10' },
@@ -626,8 +632,8 @@ class MeuJogo extends Phaser.Scene {
      this.respostaText.setAlpha(0);
 
     // --- TEMPORIZADORES e LÓGICA DE PERGUNTAS ---
-     this.tempoResposta = 15000; // 15s para responder
-     this.tempoPausa = 9000;    // 9s de pausa entre perguntas
+     this.tempoResposta = 25000; // 25s para responder
+     this.tempoPausa = 7000;    // 6s de pausa entre perguntas
      this.timerPergunta = null;
      this.perguntaAtiva = false;
      this.respostaAtual = '';
@@ -715,16 +721,20 @@ class MeuJogo extends Phaser.Scene {
      this.perguntaText.setText('✅ Correto!');this.sound.play('sfx_acerto', { volume: 2.0 });this.pontuacao += 30;
      this.combo++;
 
-     if (this.combo >= 3) {
-     this.pontuacao += 55; // bônus de combo
-    this.combo = 0; // reseta combo
+     if (this.combo == 2) {
+     this.pontuacao += 15; // bônus de combo
+     
+    //this.combo = 0; // reseta combo
     // Efeito visual do combo
-     const comboText = this.add.text(960, 540, '+55 Combo!', {
-     fontSize: '72px',
-     color: '#ffff00',
-     stroke: '#000',
-     strokeThickness: 10
+     const comboText = this.add.text(960, 540, '😁👍+15 Combo!', {
+     fontSize: '60px',
+     fontFamily: 'Arial Black',
+     color: '#b3fa0cff',
+     stroke: '#0e0e0dff',
+     strokeThickness: 10,
+     align: 'center'
      }).setOrigin(0.5).setDepth(150).setAlpha(0);
+     
 
      this.tweens.add({
      targets: comboText,
@@ -737,6 +747,111 @@ class MeuJogo extends Phaser.Scene {
      onComplete: () => comboText.destroy()
     });
     }
+    if (this.combo == 3) {
+     this.pontuacao += 20; // bônus de combo
+     
+    //this.combo = 0; // reseta combo
+    // Efeito visual do combo
+     const comboText = this.add.text(960, 540, 'ETA NOIS!😁👍+20 Combo!', {
+     fontSize: '60px',
+     fontFamily: 'Arial Black',
+     color: '#b3fa0cff',
+     stroke: '#0e0e0dff',
+     strokeThickness: 10,
+     align: 'center'
+     }).setOrigin(0.5).setDepth(150).setAlpha(0);
+     
+
+     this.tweens.add({
+     targets: comboText,
+     alpha: 1,
+     y: 440,
+     duration: 500,
+     yoyo: true,
+     hold: 500,
+     ease: 'Back.easeOut',
+     onComplete: () => comboText.destroy()
+    });
+    }if (this.combo == 4) {
+     this.pontuacao += 25; // bônus de combo
+     
+    //this.combo = 0; // reseta combo
+    // Efeito visual do combo
+     const comboText = this.add.text(960, 540, 'HIIIII HUUUUL .🤩👍+25 Combo!', {
+     fontSize: '60px',
+     fontFamily: 'Arial Black',
+     color: '#b3fa0cff',
+     stroke: '#0e0e0dff',
+     strokeThickness: 10,
+     align: 'center'
+     }).setOrigin(0.5).setDepth(150).setAlpha(0);
+     
+
+     this.tweens.add({
+     targets: comboText,
+     alpha: 1,
+     y: 440,
+     duration: 500,
+     yoyo: true,
+     hold: 500,
+     ease: 'Back.easeOut',
+     onComplete: () => comboText.destroy()
+    });
+    }
+    if (this.combo == 5) {
+     this.pontuacao += 35; // bônus de combo
+     
+    //this.combo = 0; // reseta combo
+    // Efeito visual do combo
+     const comboText = this.add.text(960, 540, 'IMPRESSIONANTE! 😍👍+35 Combo!', {
+     fontSize: '60px',
+     fontFamily: 'Arial Black',
+     color: '#b3fa0cff',
+     stroke: '#0e0e0dff',
+     strokeThickness: 10,
+     align: 'center'
+     }).setOrigin(0.5).setDepth(150).setAlpha(0);
+     
+
+     this.tweens.add({
+     targets: comboText,
+     alpha: 1,
+     y: 440,
+     duration: 500,
+     yoyo: true,
+     hold: 500,
+     ease: 'Back.easeOut',
+     onComplete: () => comboText.destroy()
+    });
+    }
+    if (this.combo == 5) {
+     this.pontuacao += 45; // bônus de combo
+     
+    //this.combo = 0; // reseta combo
+    // Efeito visual do combo
+     const comboText = this.add.text(960, 540, 'YOU ARE A SUPER PLAYER! 🎉🤩🎉 +45 Combo!', {
+     fontSize: '60px',
+     fontFamily: 'Arial Black',
+     color: '#b3fa0cff',
+     stroke: '#0e0e0dff',
+     strokeThickness: 10,
+     align: 'center'
+     }).setOrigin(0.5).setDepth(150).setAlpha(0);
+     
+
+     this.tweens.add({
+     targets: comboText,
+     alpha: 1,
+     y: 440,
+     duration: 500,
+     yoyo: true,
+     hold: 500,
+     ease: 'Back.easeOut',
+     onComplete: () => comboText.destroy()
+    });
+    }
+
+  
 
     this.atualizarPontuacao('#00ff00'); // verde = acerto normal
     this.verificarMeta();
@@ -772,6 +887,7 @@ class MeuJogo extends Phaser.Scene {
      });
       }
     });
+    
 
     // atualiza texto da vida
      if (this.vidaText) this.vidaText.setText('Vida: ' + this.vidaAtual);
@@ -906,8 +1022,8 @@ class MeuJogo extends Phaser.Scene {
     this.tweens.add({
      targets: [this.professor, this.motorista], // 🔥 ALVO DUPLO 🔥
      alpha: 0,
-     scale: 1.05,
-     duration: 450,
+     scale: 1.3,
+     duration: 300,
      ease: 'Sine.easeOut',
        onComplete: () => {
          this.professor.setFrame(novoFrame); // Atualiza Professor
@@ -916,7 +1032,7 @@ class MeuJogo extends Phaser.Scene {
         targets: [this.professor, this.motorista],
           alpha: 1,
           scale: 1.0,
-          duration: 500,
+          duration: 400,
           ease: 'Sine.easeIn'
         });
         }
@@ -1040,11 +1156,13 @@ class MeuJogo extends Phaser.Scene {
 
     // texto de pontuação
      const textoVitoria = this.add.text(960, 600, `Pontos: ${this.pontuacao}`, {
-     fontSize: '64px',
-     color: '#ffff00',
-     stroke: '#000',
-     strokeThickness: 10
+    fontSize: '60px',
+     fontFamily: 'Arial Black',
+     color: '#ffee00ff',
+     stroke: '#000000ff',
+     strokeThickness: 14,
     }).setOrigin(0.5).setDepth(201).setAlpha(0);
+    
 
    // fade in
      this.tweens.add({
