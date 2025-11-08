@@ -824,7 +824,7 @@ class MeuJogo extends Phaser.Scene {
      onComplete: () => comboText.destroy()
     });
     }
-    if (this.combo == 5) {
+    if (this.combo == 6) {
      this.pontuacao += 45; // bônus de combo
      
     //this.combo = 0; // reseta combo
@@ -1193,5 +1193,6 @@ class MeuJogo extends Phaser.Scene {
     });
     });
   }
+
 
 } // FIM DA CENA
