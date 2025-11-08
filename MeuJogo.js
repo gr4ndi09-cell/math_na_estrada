@@ -824,7 +824,7 @@ class MeuJogo extends Phaser.Scene {
      onComplete: () => comboText.destroy()
     });
     }
-    if (this.combo == 6) {
+    if (this.combo >= 6) {
      this.pontuacao += 45; // bônus de combo
      
     //this.combo = 0; // reseta combo
@@ -859,9 +859,9 @@ class MeuJogo extends Phaser.Scene {
     } else {
       const corretaExibir = corretaRaw;
       if (timedOut) {
-        this.perguntaText.setText(`⌛ Tempo esgotado! Resp.: ${corretaExibir}`);this.sound.play('sfx_erro', { volume: 2.0 });
+        this.perguntaText.setText(`⌛ Tempo esgotado! Resp.: ${corretaExibir}`);this.sound.play('sfx_erro', { volume: 2.0 });this.combo = 0;
       } else {
-        this.perguntaText.setText(`❌ Errado (resp.: ${corretaExibir})`);this.sound.play('sfx_erro', { volume: 2.0 });
+        this.perguntaText.setText(`❌ Errado (resp.: ${corretaExibir})`);this.sound.play('sfx_erro', { volume: 2.0 });this.combo = 0;
       }
       if (this.vidaAtual > 0) this.vidaAtual--;
     }
@@ -1146,7 +1146,7 @@ class MeuJogo extends Phaser.Scene {
     if (this.vitoriaAtiva) return; // evita múltiplas ativações
     this.vitoriaAtiva = true;
     // pausa perguntas e obstáculos temporariamente
-    //this.time.paused = true;
+    this.time.paused = true;
 
     // imagem de vitória (coloque o arquivo em assets como "vitoria.png")
      const telaVitoria = this.add.image(960, 600, 'vitoria')
@@ -1156,7 +1156,7 @@ class MeuJogo extends Phaser.Scene {
 
     // texto de pontuação
      const textoVitoria = this.add.text(960, 600, `Pontos: ${this.pontuacao}`, {
-    fontSize: '60px',
+    fontSize: '70px',
      fontFamily: 'Arial Black',
      color: '#ffee00ff',
      stroke: '#000000ff',
@@ -1175,11 +1175,11 @@ class MeuJogo extends Phaser.Scene {
     if (this.audioJogo && this.audioJogo.isPlaying) this.audioJogo.stop();
 
     // toca trilha da vitória
-     this.audioVitoria = this.sound.add('audio_vitoria', { volume: 5.0 });
+     this.audioVitoria = this.sound.add('audio_vitoria', { volume: 6.0 });
      this.audioVitoria.play();
 
     // após 10 segundos, remove a tela e retoma o jogo
-      this.time.delayedCall(10000, () => {
+      this.time.delayedCall(7000, () => {
       this.tweens.add({
       targets: [telaVitoria, textoVitoria],
       alpha: 0,
@@ -1193,6 +1193,5 @@ class MeuJogo extends Phaser.Scene {
     });
     });
   }
-
 
 } // FIM DA CENA
