@@ -1146,7 +1146,7 @@ class MeuJogo extends Phaser.Scene {
     if (this.vitoriaAtiva) return; // evita múltiplas ativações
     this.vitoriaAtiva = true;
     // pausa perguntas e obstáculos temporariamente
-    this.time.paused = true;
+    //this.time.paused = true;
 
     // imagem de vitória (coloque o arquivo em assets como "vitoria.png")
      const telaVitoria = this.add.image(960, 600, 'vitoria')
@@ -1168,7 +1168,7 @@ class MeuJogo extends Phaser.Scene {
      this.tweens.add({
      targets: [telaVitoria, textoVitoria],
      alpha: 1,
-     duration: 1000,
+     duration: 600,
      ease: 'Sine.easeInOut'
     });
 
@@ -1179,7 +1179,7 @@ class MeuJogo extends Phaser.Scene {
      this.audioVitoria.play();
 
     // após 10 segundos, remove a tela e retoma o jogo
-      this.time.delayedCall(7000, () => {
+      this.time.delayedCall(5000, () => {
       this.tweens.add({
       targets: [telaVitoria, textoVitoria],
       alpha: 0,
@@ -1187,11 +1187,12 @@ class MeuJogo extends Phaser.Scene {
       onComplete: () => {
         telaVitoria.destroy();
         textoVitoria.destroy();
-        this.time.paused = false;
+        //this.time.paused = false;
         this.venceu = false; // permite continuar jogando
       } 
     });
     });
   }
+
 
 } // FIM DA CENA
