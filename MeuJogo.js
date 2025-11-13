@@ -556,83 +556,103 @@ class MeuJogo extends Phaser.Scene {
       { q: 'Qual é a quarta parte de 100', a: '25'},
     ];
     
-      // controle de game play
+    // =========================
+// CONTROLE DE MOVIMENTO
+// =========================
 
-    // Detecta o início do toque
-    this.input.on('pointerdown', (pointer) => {
-    this.startY = pointer.y;
-     });
+// --- DESKTOP (scroll do mouse) ---
+this.input.on('wheel', (pointer, gameObjects, deltaX, deltaY) => {
+  const minLane = 0; // Faixa de cima
+  const maxLane = this.carLanes.length - 1; // Faixa de baixo (2)
 
-    // Detecta o fim do toque
-    this.input.on('pointerup', (pointer) => {
-    const deltaY = pointer.y - this.startY;
- 
-     if (deltaY < -50) {
-     // deslizou para cima
-     this.moverCarroCima();
-    } else if (deltaY > 50) {
-      // deslizou para baixo
-     this.moverCarroBaixo();
-    }
-     });
-
-     this.input.on('wheel', (pointer, gameObjects, deltaX, deltaY) => {
-     const minLane = 0; // Faixa de cima
-     const maxLane = this.carLanes.length - 1; // Faixa de baixo (2)
-
-     if (deltaY < 0) {
-     // Scroll para cima (sobe)
-     this.currentLane = Math.max(minLane, this.currentLane - 1);
-    } else if (deltaY > 0) {
-     // Scroll para baixo (desce)
-      this.currentLane = Math.min(maxLane, this.currentLane + 1);
-    }
-    
-
-
-   
-
-    this.tweens.add({
-    targets: this.car,
-     y: this.carLanes[this.currentLane], // O carro vai para o Y da faixa escolhida
-     duration: 250,
-     ease: 'Sine.easeInOut'
-    });
-    });
-
-    // Cria um input invisível só para chamar o teclado do Android
-this.hiddenInput = document.createElement('input');
-this.hiddenInput.type = 'number'; // força o teclado numérico
-this.hiddenInput.style.opacity = 0;
-this.hiddenInput.style.position = 'absolute';
-this.hiddenInput.style.pointerEvents = 'none';
-this.hiddenInput.style.height = '0px';
-this.hiddenInput.style.width = '0px';
-document.body.appendChild(this.hiddenInput);
-
-// Captura o valor digitado
-this.hiddenInput.addEventListener('input', () => {
-  const valor = this.hiddenInput.value.trim();
-  if (valor !== '') {
-    this.processarResposta(valor);
-    this.hiddenInput.value = ''; // limpa
-    this.hiddenInput.blur(); // fecha o teclado
+  if (deltaY < 0) {
+    // Scroll para cima (sobe)
+    this.currentLane = Math.max(minLane, this.currentLane - 1);
+  } else if (deltaY > 0) {
+    // Scroll para baixo (desce)
+    this.currentLane = Math.min(maxLane, this.currentLane + 1);
   }
+
+  // Movimento suave
+  this.tweens.add({
+    targets: this.car,
+    y: this.carLanes[this.currentLane], // O carro vai para o Y da faixa escolhida
+    duration: 250,
+    ease: 'Sine.easeInOut'
+  });
 });
 
-    // // Criando o elemento de input HTML
-    //   const inputElement = document.createElement('input');
-    //   inputElement.type = 'text';
-    //   inputElement.id = 'respostaInput';
-    //   inputElement.style.position = 'absolute';
-    //   inputElement.style.top = '80%';
-    //   inputElement.style.left = '50%';
-    //   inputElement.style.transform = 'translate(-50%, -50%)';
-    //   inputElement.style.fontSize = '32px';
-    //   inputElement.style.padding = '10px';
-    //   inputElement.style.zIndex = 1000;
-    //   inputElement.style.display = 'none'; // ← começa oculto
-    //   document.body.appendChild(inputElement);
+
+// --- MOBILE (gesto de deslizar vertical) ---
+this.input.on('pointerdown', (pointer) => {
+  this.startY = pointer.y;
+});
+
+this.input.on('pointerup', (pointer) => {
+  const deltaY = pointer.y - this.startY;
+  const minLane = 0;
+  const maxLane = this.carLanes.length - 1;
+
+  if (deltaY < -50) {
+    // deslizou para cima
+    this.currentLane = Math.max(minLane, this.currentLane - 1);
+  } else if (deltaY > 50) {
+    // deslizou para baixo
+    this.currentLane = Math.min(maxLane, this.currentLane + 1);
+  }
+
+  // Movimento suave (mesmo tween usado no PC)
+  this.tweens.add({
+    targets: this.car,
+    y: this.carLanes[this.currentLane],
+    duration: 250,
+    ease: 'Sine.easeInOut'
+  });
+});
+
+    // Cria um input invisível só para chamar o teclado do Android
+// this.hiddenInput = document.createElement('input');
+// this.hiddenInput.type = 'number'; // força o teclado numérico
+// this.hiddenInput.style.opacity = 0;
+// this.hiddenInput.style.position = 'absolute';
+// this.hiddenInput.style.pointerEvents = 'none';
+// this.hiddenInput.style.height = '0px';
+// this.hiddenInput.style.width = '0px';
+// document.body.appendChild(this.hiddenInput);
+
+// Captura o valor digitado
+// this.hiddenInput.addEventListener('input', () => {
+//   const valor = this.hiddenInput.value.trim();
+//   if (valor !== '') {
+//     this.processarResposta(valor);
+//     this.hiddenInput.value = ''; // limpa
+//     this.hiddenInput.blur(); // fecha o teclado
+//   }
+// });
+
+// // Cria campo de entrada invisível (teclado nativo)
+// let inputElement = document.createElement('input');
+// inputElement.type = 'number';
+// inputElement.style.position = 'absolute';
+// inputElement.style.top = '-100px'; // fora da tela
+// inputElement.style.opacity = 0;
+// document.body.appendChild(inputElement);
+
+// // Quando precisar pedir a resposta:
+// this.abrirEntradaResposta = () => {
+//   inputElement.value = '';
+//   inputElement.style.top = '50%'; // ativa
+//   inputElement.focus();
+
+//   inputElement.onchange = () => {
+//     const resposta = inputElement.value.trim();
+//     this.verificarResposta(resposta);
+//     inputElement.style.top = '-100px'; // esconde novamente
+//   };
+// }
+// this.input.on('pointerdown', () => {
+//   this.abrirEntradaResposta();
+// })
 
 
     // permite números, sinal de menos, vírgula, ponto e letras (caso queira respostas com texto)
@@ -678,6 +698,20 @@ this.hiddenInput.addEventListener('input', () => {
      this.perguntaText.setAlpha(0);
      this.respostaText.setAlpha(0);
 
+     // Referência ao campo oculto
+this.campoDados = document.getElementById('campoDados');
+
+// Garante que ele exista
+if (this.campoDados) {
+  // Quando o jogador digita algo e pressiona Enter (ou “ok” no teclado Android)
+  this.campoDados.addEventListener('change', () => {
+    const resposta = this.campoDados.value;
+    this.verificarResposta(resposta); // chama a função que valida a resposta
+    this.campoDados.value = ''; // limpa campo
+    this.campoDados.blur(); // fecha o teclado
+  });
+}
+
     // --- TEMPORIZADORES e LÓGICA DE PERGUNTAS ---
      this.tempoResposta = 25000; // 25s para responder
      this.tempoPausa = 7000;    // 6s de pausa entre perguntas
@@ -691,17 +725,17 @@ this.hiddenInput.addEventListener('input', () => {
       // inputElement.style.display = 'block';
       // inputElement.focus();
       // Quando o jogador tocar na área de resposta chama teclado
-      this.lousa.setInteractive();
-      this.lousa.on('pointerdown', () => {
-      this.hiddenInput.focus(); // abre o teclado no Android
-      });
-      //clicando fora some o teclado
-      this.input.on('pointerdown', (pointer, gameObject) => {
-      if (!gameObject || gameObject !== this.caixaResposta) {
-      this.hiddenInput.blur(); // fecha teclado se tocar fora
-      }
-     });
-
+    //   this.lousa.setInteractive();
+    //   this.lousa.on('pointerdown', () => {
+    //   this.hiddenInput.focus(); // abre o teclado no Android
+    //   });
+    //   //clicando fora some o teclado
+    //   this.input.on('pointerdown', (pointer, gameObject) => {
+    //   if (!gameObject || gameObject !== this.caixaResposta) {
+    //   this.hiddenInput.blur(); // fecha teclado se tocar fora
+    //   }
+    //  });
+     
     // sorteia uma pergunta não vazia
       let idx = Phaser.Math.Between(0, this.perguntas.length - 1);
     // evita índice para pergunta vazia
@@ -718,6 +752,11 @@ this.hiddenInput.addEventListener('input', () => {
       
     // mostra HUD com fade
       this.toggleHUD(true);
+      // Chama o teclado do Android (foca no input oculto)
+     if (this.campoDados) {
+     this.campoDados.focus();
+     }
+           
 
     // limpa timer anterior
       if (this.timerPergunta) this.timerPergunta.remove();
@@ -1252,6 +1291,4 @@ this.hiddenInput.addEventListener('input', () => {
     });
     });
   }
-
 } // FIM DA CENA
-
