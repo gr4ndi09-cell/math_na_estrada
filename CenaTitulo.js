@@ -4,6 +4,14 @@ class CenaTitulo extends Phaser.Scene {
   }
 
   create() {
+    // Ativar tela cheia (somente mobile)
+if (this.sys.game.device.os.android || this.sys.game.device.os.iOS) {
+  this.input.once('pointerdown', () => {
+    if (!this.scale.isFullscreen) {
+      this.scale.startFullscreen();
+    }
+  });
+}
 
      // tecla F - fullscreen
      this.input.keyboard.on('keydown-F', () => {
@@ -96,3 +104,4 @@ class CenaTitulo extends Phaser.Scene {
     });
   }
 }
+
