@@ -555,6 +555,21 @@ class MeuJogo extends Phaser.Scene {
       { q: 'Quantas partes de 1/4 cabem em 1 inteiro?', a: '4' },
       { q: 'Qual é a quarta parte de 100', a: '25'},
     ];
+    // Ativar tela cheia (somente mobile)
+if (this.sys.game.device.os.android || this.sys.game.device.os.iOS) {
+  this.input.once('pointerdown', () => {
+    if (!this.scale.isFullscreen) {
+      this.scale.startFullscreen();
+    }
+  });
+}
+    if (!this.scale.isFullscreen) {
+  try {
+    this.scale.startFullscreen();
+  } catch (e) {
+    console.warn("O navegador bloqueou o fullscreen automático. Toque na tela para ativar.");
+  }
+}
     
     // =========================
 // CONTROLE DE MOVIMENTO
@@ -1312,3 +1327,4 @@ if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
   }
 
 } // FIM DA CENA
+
