@@ -1,17 +1,11 @@
 class MeuJogo extends Phaser.Scene {
   constructor() {
     super({key: 'MeuJogo'});
-    
-    // ...
-
-   
-    this.bgMusic = null;    // letiável para a Música de Fundo
+        // ...
+       this.bgMusic = null;    // letiável para a Música de Fundo
     this.motorSound = null; // letiável para o Som do Motor
     this.isAudioEnabled = false; // Permanece para controle de clique inicial
-  
-  }
-
-
+    }
     // --- FUNÇÕES AUXILIARES DE ESTADO ---
   mudarEstado(novoEstado) {
    this.gameState = novoEstado;
@@ -102,21 +96,24 @@ class MeuJogo extends Phaser.Scene {
   });
       
   }
-       
+        
   // toggleHUD = (mostrar) => {
   //  const alvoAlpha = mostrar ? 1 : 0;
   //  const targets = [this.hud, this.professor, this.motorista, this.vidaText, this.lousa, this.perguntaText, this.respostaText];
   //  const validTargets = targets.filter(t => t);
   //  this.tweens.add({ targets: validTargets, alpha: alvoAlpha, duration: 700, ease: 'Sine.easeInOut' });
   // };
-
-    
-  //INICIO DO CREATE
+      //INICIO DO CREATE
   create() {
 
      this.jogoAtivo = true;
      this.score = 0;
 
+     // tecla F - fullscreen
+     this.input.keyboard.on('keydown-F', () => {
+      if (this.scale.isFullscreen) this.scale.stopFullscreen();
+      else this.scale.startFullscreen();
+    });
 
     // === SISTEMA DE PONTUAÇÃO ===
      this.pontuacao = 0;
@@ -125,8 +122,7 @@ class MeuJogo extends Phaser.Scene {
      this.combo = 0; // acertos consecutivos
      this.tempoSemColisao = 0;
 
-   
-    // === HUD DE PONTUAÇÃO ===
+       // === HUD DE PONTUAÇÃO ===
 
     // Fundo da pontuação
      this.pontosFundo = this.add.image(960, 80, 'pontos') // centralizado no topo
@@ -144,9 +140,6 @@ class MeuJogo extends Phaser.Scene {
      })
      .setOrigin(0.5)
      .setDepth(101);
-
-
-
 
      if (UserActivation) {this.sound.play('bgmusic', { volume: 0.4, loop: true })
       };  //INICIA SOM APOS INTERAÇÃO DO USUARIO
@@ -215,7 +208,7 @@ class MeuJogo extends Phaser.Scene {
 
     // evento que gera obstáculos de forma periódica
      this.eventoObstaculos = this.time.addEvent({
-     delay: 2800,
+     delay: 3300,
      callback: this.gerarObstaculo,
      callbackScope: this,
      loop: true
@@ -496,7 +489,7 @@ class MeuJogo extends Phaser.Scene {
       { q: 'Calcule a média de 7, 8 e 9?', a: '8' },
       { q: 'Um retângulo tem perímetro 24 e base 7. Qual a altura?', a: '5' },
       { q: 'Qual a da raiz cúbica de 27?', a: '3' },
-      { q: 'Se 3/4 de uma pizza foi comida, quantos pedaços de pizza sobram ?', a: '1' },
+      { q: 'Se 3/4 de uma pizza foi comida, qual a fração que sobra ?', a: '1/4' },
       { q: 'Quantos minutos tem meia hora?', a: '30' },
       { q: 'Qual é o número primo seguinte a 7?', a: '11' },
       { q: 'Em uma sala com 20 alunos, 5 estavam ausentes. Qual a porcentagem dos alunos presentes ?', a: '75' },
@@ -504,7 +497,7 @@ class MeuJogo extends Phaser.Scene {
       { q: 'Se um quadrado tem lado 9, qual seu perímetro?', a: '36' },
       { q: 'Qual é o valor de 15 - 7 + 3?', a: '11' },
       { q: 'Um telefone custa 100 e tem desconto de 15%. Qual o preço final?', a: '85' },
-      { q: 'Se a velocidade de um carro é 90km/h, quantos km percorre em 2 horas?', a: '180', a:'180'},
+      { q: 'Se a velocidade de um carro é 90km/h, quantos km percorre em 2 horas?', a: '180', a:'180km'},
       { q: 'Qual a área de um triângulo com base 10 e altura 6?', a: '30' },
       { q: 'Qual o resultado de 8 × 7?', a: '56' },
       { q: 'Se um triângulo tem dois catetos 5 e 12, qual a hipotenuza se esse triangulo for retângulo?', a: '13' },
@@ -517,7 +510,7 @@ class MeuJogo extends Phaser.Scene {
       { q: 'Um PENTÁGONO,é um polígono com quantos lados?', a: '5' },
       { q: 'Resolva: 2(x - 3) = 8', a: '7' },
       { q: 'Qual a área de um quadrado com lado 11?', a: '121' },
-      { q: 'Qual a porcentágem que corresponde a fração 1/2?', a: '50' },
+      { q: 'Qual a fração que corresponde a 50% (arredonde)?', a: '1/2' },
       { q: 'Um pacote tem 24 balas e é dividido entre 6 crianças igualmente. Quantas balas cada uma recebe?', a: '4' },
       { q: 'Qual a raiz quadrada de 100?', a: '10' },
       { q: 'Qual o valor de 3x se x=4?', a: '12' },
@@ -565,6 +558,22 @@ class MeuJogo extends Phaser.Scene {
     
     // controle de game play
 
+     this.input.on('pointerdown', (pointer) => {
+     this.startX = pointer.x;
+    });
+
+     this.input.on('pointerup', (pointer) => {
+     const deltaX = pointer.x - this.startX;
+  
+     if (deltaX > 50) {
+     // deslizou para a direita
+     this.moverCarroDireita();
+    } else if (deltaX < -50) {
+    // deslizou para a esquerda
+    this.moverCarroEsquerda();
+    }
+    });
+
      this.input.on('wheel', (pointer, gameObjects, deltaX, deltaY) => {
      const minLane = 0; // Faixa de cima
      const maxLane = this.carLanes.length - 1; // Faixa de baixo (2)
@@ -576,14 +585,52 @@ class MeuJogo extends Phaser.Scene {
      // Scroll para baixo (desce)
       this.currentLane = Math.min(maxLane, this.currentLane + 1);
     }
+    
+
+
+   
 
     this.tweens.add({
     targets: this.car,
      y: this.carLanes[this.currentLane], // O carro vai para o Y da faixa escolhida
-     duration: 180,
+     duration: 250,
      ease: 'Sine.easeInOut'
     });
     });
+
+    // Cria um input invisível só para chamar o teclado do Android
+this.hiddenInput = document.createElement('input');
+this.hiddenInput.type = 'number'; // força o teclado numérico
+this.hiddenInput.style.opacity = 0;
+this.hiddenInput.style.position = 'absolute';
+this.hiddenInput.style.pointerEvents = 'none';
+this.hiddenInput.style.height = '0px';
+this.hiddenInput.style.width = '0px';
+document.body.appendChild(this.hiddenInput);
+
+// Captura o valor digitado
+this.hiddenInput.addEventListener('input', () => {
+  const valor = this.hiddenInput.value.trim();
+  if (valor !== '') {
+    this.processarResposta(valor);
+    this.hiddenInput.value = ''; // limpa
+    this.hiddenInput.blur(); // fecha o teclado
+  }
+});
+
+    // // Criando o elemento de input HTML
+    //   const inputElement = document.createElement('input');
+    //   inputElement.type = 'text';
+    //   inputElement.id = 'respostaInput';
+    //   inputElement.style.position = 'absolute';
+    //   inputElement.style.top = '80%';
+    //   inputElement.style.left = '50%';
+    //   inputElement.style.transform = 'translate(-50%, -50%)';
+    //   inputElement.style.fontSize = '32px';
+    //   inputElement.style.padding = '10px';
+    //   inputElement.style.zIndex = 1000;
+    //   inputElement.style.display = 'none'; // ← começa oculto
+    //   document.body.appendChild(inputElement);
 
 
     // permite números, sinal de menos, vírgula, ponto e letras (caso queira respostas com texto)
@@ -591,12 +638,14 @@ class MeuJogo extends Phaser.Scene {
     // teclado para digitar resposta e Enter/Backspace
 
     this.input.keyboard.on('keydown', (ev) => {
+    
      if (!this.perguntaAtiva) return; // só aceita digitação quando há pergunta ativa
      if (ev.key === 'Backspace') {
       this.respostaAtual = this.respostaAtual.slice(0, -1);
     } else if (ev.key === 'Enter') {
       this.validarResposta(false); // respondeu dentro do tempo
     } else if (/^[0-9\-.,A-Za-z]$/.test(ev.key)) 
+    
     {
     
       this.respostaAtual += ev.key;
@@ -604,11 +653,7 @@ class MeuJogo extends Phaser.Scene {
       this.respostaText.setText(this.respostaAtual);
     });
 
-    // tecla F - fullscreen
-     this.input.keyboard.on('keydown-F', () => {
-      if (this.scale.isFullscreen) this.scale.stopFullscreen();
-      else this.scale.startFullscreen();
-    });
+    
 
   // --- FUNÇÃO: toggleHUD (fade in/out) ---
     this.toggleHUD = (mostrar) => {
@@ -632,7 +677,7 @@ class MeuJogo extends Phaser.Scene {
      this.respostaText.setAlpha(0);
 
     // --- TEMPORIZADORES e LÓGICA DE PERGUNTAS ---
-     this.tempoResposta = 20000; // 20s para responder
+     this.tempoResposta = 25000; // 25s para responder
      this.tempoPausa = 7000;    // 6s de pausa entre perguntas
      this.timerPergunta = null;
      this.perguntaAtiva = false;
@@ -640,6 +685,21 @@ class MeuJogo extends Phaser.Scene {
 
     // função que escolhe e mostra nova pergunta
       this.novaPergunta = () => {
+       // Exibe o campo de resposta
+      // inputElement.style.display = 'block';
+      // inputElement.focus();
+      // Quando o jogador tocar na área de resposta chama teclado
+      this.lousa.setInteractive();
+      this.lousa.on('pointerdown', () => {
+      this.hiddenInput.focus(); // abre o teclado no Android
+      });
+      //clicando fora some o teclado
+      this.input.on('pointerdown', (pointer, gameObject) => {
+      if (!gameObject || gameObject !== this.caixaResposta) {
+      this.hiddenInput.blur(); // fecha teclado se tocar fora
+      }
+     });
+
     // sorteia uma pergunta não vazia
       let idx = Phaser.Math.Between(0, this.perguntas.length - 1);
     // evita índice para pergunta vazia
@@ -653,7 +713,7 @@ class MeuJogo extends Phaser.Scene {
       this.respostaAtual = '';
       this.respostaText.setText('');
       this.perguntaAtiva = true;
-
+      
     // mostra HUD com fade
       this.toggleHUD(true);
 
@@ -664,6 +724,10 @@ class MeuJogo extends Phaser.Scene {
       this.timerPergunta = this.time.delayedCall(this.tempoResposta, () => {
         // tempo esgotado -> considera errado
         this.validarResposta(true);
+        //const resposta = parseInt(inputElement.value);
+        //esconde teclado no celular
+        // inputElement.value = '';
+        // inputElement.style.display = 'none';
       });
     };
 
@@ -673,6 +737,9 @@ class MeuJogo extends Phaser.Scene {
       if (this.timerPergunta) {
         this.timerPergunta.remove();
         this.timerPergunta = null;
+         // Limpa e esconde o input
+       inputElement.value = '';
+       inputElement.style.display = 'none';
       }
       this.perguntaAtiva = false;
 
@@ -692,9 +759,7 @@ class MeuJogo extends Phaser.Scene {
      
    // FIM DO CREATE     
   } 
-  
-  // VALIDAÇÃO DE RESPOSTA
-
+    // VALIDAÇÃO DE RESPOSTA
   validarResposta(timedOut = false) {
     if (!this.perguntaAtiva) return; // evita chamadas duplicadas
      this.perguntaAtiva = false;
@@ -923,7 +988,6 @@ class MeuJogo extends Phaser.Scene {
 
    // FIM DE VALIDAR RESPOSTA
   }
-
   //INICIO DE GERAR OBSTACULO//
   gerarObstaculo() {
      // faixas fixas (ajuste conforme o Y real das lanes do carro)
@@ -995,8 +1059,6 @@ class MeuJogo extends Phaser.Scene {
    //FIM DE GERAR OBSTACULO//
 
   }
-
-
   // TRATAR COLISÃO COM OBSTÁCULO
   tratarColisao(obst) {
 
@@ -1064,8 +1126,6 @@ class MeuJogo extends Phaser.Scene {
     this.tempoSemColisao = 0;
 
   } //FIM DE TRATAR COLISÃO
-
-
   //INICIO DE UPDATE//
   update(time, delta) {
 
@@ -1109,7 +1169,6 @@ class MeuJogo extends Phaser.Scene {
     });
 
   } // FIM DE UPDATE
-
   // VERIFICAÇÃO DA META DO JOGO
   verificarMeta() {
    if (this.venceu) return; // evita repetir
@@ -1120,7 +1179,6 @@ class MeuJogo extends Phaser.Scene {
   }
   // Exemplo de onde ocorre a verificação da pontuação
   }
-
   //ATUALIZAÇÃO DE PONTUAÇÃO
   atualizarPontuacao(cor = '#00ff00') {
    // Atualiza o texto
@@ -1139,7 +1197,6 @@ class MeuJogo extends Phaser.Scene {
      onComplete: () => this.scoreText.setColor(corOriginal)
     });
   }
-
   //MOSTRA TELA DE VITÓRIA
   mostrarTelaVitoria() {
 
@@ -1168,7 +1225,7 @@ class MeuJogo extends Phaser.Scene {
      this.tweens.add({
      targets: [telaVitoria, textoVitoria],
      alpha: 1,
-     duration: 600,
+     duration: 1000,
      ease: 'Sine.easeInOut'
     });
 
@@ -1178,7 +1235,7 @@ class MeuJogo extends Phaser.Scene {
      this.audioVitoria = this.sound.add('audio_vitoria', { volume: 6.0 });
      this.audioVitoria.play();
 
-    // após 10 segundos, remove a tela e retoma o jogo
+    // após 5 segundos, remove a tela e retoma o jogo
       this.time.delayedCall(5000, () => {
       this.tweens.add({
       targets: [telaVitoria, textoVitoria],
@@ -1187,13 +1244,10 @@ class MeuJogo extends Phaser.Scene {
       onComplete: () => {
         telaVitoria.destroy();
         textoVitoria.destroy();
-        //this.time.paused = false;
+        //this.time.pause = true;
         this.venceu = false; // permite continuar jogando
       } 
     });
     });
   }
-
-
 } // FIM DA CENA
-
