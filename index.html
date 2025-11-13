@@ -1,19 +1,18 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
     <body>
-        <input 
+ <input 
   type="number" 
-  id="campoDados" 
+  id="campoDados"
   inputmode="numeric"
   style="
     position: absolute;
-    top: -100px; 
-    left: -100px; 
-    opacity: 0; 
-    width: 1px; 
+    top: -100px;
+    left: -100px;
+    opacity: 0;
+    width: 1px;
     height: 1px;
-  "
->
+    pointer-events: none; /* 👈 impede cliques acidentais */
 
 <head>
     <meta charset="UTF-8" />
@@ -42,5 +41,6 @@
     };
     const game = new Phaser.Game(config);
     </script>
+
 
 </body>
