@@ -609,6 +609,22 @@ this.input.on('pointerup', (pointer) => {
     ease: 'Sine.easeInOut'
   });
 });
+    // === ENTRADA DE DADOS NO ANDROID ===
+this.campoDados = document.getElementById('campoDados');
+
+if (this.campoDados) {
+  this.campoDados.addEventListener('change', () => {
+    const respostaDigitada = this.campoDados.value;
+    this.campoDados.value = '';
+    this.campoDados.blur(); // fecha o teclado
+
+    // chama a função de verificação do jogo
+    if (this.verificarResposta) {
+      this.verificarResposta(respostaDigitada);
+    }
+  });
+}
+
 
     // Cria um input invisível só para chamar o teclado do Android
 // this.hiddenInput = document.createElement('input');
@@ -752,10 +768,13 @@ if (this.campoDados) {
       
     // mostra HUD com fade
       this.toggleHUD(true);
-      // Chama o teclado do Android (foca no input oculto)
-     if (this.campoDados) {
-     this.campoDados.focus();
-     }
+     // Só chama o teclado se estiver em dispositivo móvel
+if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+  if (this.campoDados) {
+    // abre o teclado somente agora
+    this.campoDados.focus();
+  }
+}
            
 
     // limpa timer anterior
@@ -1291,4 +1310,5 @@ if (this.campoDados) {
     });
     });
   }
+
 } // FIM DA CENA
