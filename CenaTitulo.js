@@ -4,50 +4,41 @@ class CenaTitulo extends Phaser.Scene {
   }
 
   create() {
-    // Ativar tela cheia (somente mobile)
-if (this.sys.game.device.os.android || this.sys.game.device.os.iOS) {
-  this.input.once('pointerdown', () => {
-    if (!this.scale.isFullscreen) {
-      this.scale.startFullscreen();
-    }
-  });
-}
 
      // tecla F - fullscreen
      this.input.keyboard.on('keydown-F', () => {
       if (this.scale.isFullscreen) this.scale.stopFullscreen();
       else this.scale.startFullscreen();
     });
-    // Fundo com instruções / história
-      // Adiciona animação de fundo depois do carregamento completo
-   this.bgAnim = this.add.sprite(960, 540, 'bg_loading_anim').setOrigin(0.5).setDepth(-1);
+ // ======== FUNDO ANIMADO ========
+    this.bgAnim = this.add.sprite(this.scale.width / 2, this.scale.height / 2, 'bg_loading_anim')
+      .setOrigin(0.5)
+      .setDisplaySize(this.scale.width, this.scale.height)
+      .setDepth(-1);
+
     this.anims.create({
       key: 'bg_loop',
       frames: this.anims.generateFrameNumbers('bg_loading_anim'),
-      frameRate: 0.2,
-      repeat: 3
-      
+      frameRate: 0.3,   // mais visível agora
+      repeat: 3      // loop infinito
     });
+
     this.bgAnim.play('bg_loop');
 
-    this.tweens.add({
-      targets: this.bgAnim,
-      alpha: { from: 0, to: 1 },
-      duration: 2000,
-      ease: 'Sine.easeInOut'
-    });
-  
-      // Texto "Aperte Enter"
-    const startText = this.add.text(960, 1000, 'APERTE ENTER OU CLIQUE NA TELA PARA INICIAR', {
-      fontSize: '42px',
-      fill: '#ffffff',
-      fontStyle: 'bold'
-    }).setOrigin(0.5).setAlpha(0);
+    // ======== TEXTO PISCANTE ========
+    const startText = this.add.text(this.scale.width / 2, this.scale.height * 0.9, 
+      'TOQUE NA TELA OU PRESSIONE ENTER PARA INICIAR', {
+      fontSize: '48px',
+      color: '#fcba05ff',
+      fontStyle: 'bold',
+      stroke: '#000000',
+      strokeThickness: 9,
+      align: 'center'
+    }).setOrigin(0.5);
 
-    // Animação suave piscando
     this.tweens.add({
       targets: startText,
-      alpha: { from: 0, to: 1 },
+      alpha: { from: 1, to: 0.3 },
       duration: 1000,
       yoyo: true,
       repeat: -1
@@ -68,26 +59,7 @@ if (this.sys.game.device.os.android || this.sys.game.device.os.iOS) {
       this.iniciarJogo();
     });
 
-    // ======== OPCIONAL: BOTÃO VISUAL "INICIAR" ========
-    // const botaoIniciar = this.add.text(960, 820, '▶ INICIAR', {
-    //   fontSize: '72px',
-    //   fill: '#FFD700',
-    //   fontFamily: 'Arial Black',
-    //   backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    //   padding: { x: 40, y: 20 }
-    // }).setOrigin(0.5).setInteractive().setDepth(1);
-
-    // botaoIniciar.on('pointerdown', () => {
-    //   this.iniciarJogo();
-    // });
-
-    // botaoIniciar.on('pointerover', () => {
-    //   botaoIniciar.setStyle({ fill: '#FFFFFF' });
-    // });
-
-    // botaoIniciar.on('pointerout', () => {
-    //   botaoIniciar.setStyle({ fill: '#FFD700' });
-    // });
+   
   }
 
   iniciarJogo() {
@@ -104,4 +76,3 @@ if (this.sys.game.device.os.android || this.sys.game.device.os.iOS) {
     });
   }
 }
-
