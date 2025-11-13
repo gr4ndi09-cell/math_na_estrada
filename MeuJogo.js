@@ -559,16 +559,16 @@ class MeuJogo extends Phaser.Scene {
     // controle de game play
 
      this.input.on('pointerdown', (pointer) => {
-     this.startX = pointer.x;
+     this.startY = pointer.y;
     });
 
      this.input.on('pointerup', (pointer) => {
-     const deltaX = pointer.x - this.startX;
+     const deltaY = pointer.y - this.startY;
   
-     if (deltaX > 50) {
+     if (delta > 50) {
      // deslizou para a direita
      this.moverCarroDireita();
-    } else if (deltaX < -50) {
+    } else if (deltay < -50) {
     // deslizou para a esquerda
     this.moverCarroEsquerda();
     }
@@ -1250,4 +1250,5 @@ this.hiddenInput.addEventListener('input', () => {
     });
     });
   }
+
 } // FIM DA CENA
