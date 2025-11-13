@@ -4,6 +4,12 @@ class CenaTitulo extends Phaser.Scene {
   }
 
   create() {
+
+     // tecla F - fullscreen
+     this.input.keyboard.on('keydown-F', () => {
+      if (this.scale.isFullscreen) this.scale.stopFullscreen();
+      else this.scale.startFullscreen();
+    });
     // Fundo com instruções / história
       // Adiciona animação de fundo depois do carregamento completo
    this.bgAnim = this.add.sprite(960, 540, 'bg_loading_anim').setOrigin(0.5).setDepth(-1);
@@ -23,14 +29,10 @@ class CenaTitulo extends Phaser.Scene {
       ease: 'Sine.easeInOut'
     });
   
-    // Música da tela de título
-    //this.audioTitulo = this.sound.add('audio2', { loop: true, volume: 0.6 });
-    //this.audioTitulo.play();
-
-    // Texto "Aperte Enter"
-    const startText = this.add.text(960, 1000, 'APERTE ENTER PARA INICIAR', {
+      // Texto "Aperte Enter"
+    const startText = this.add.text(960, 1000, 'APERTE ENTER OU CLIQUE NA TELA PARA INICIAR', {
       fontSize: '42px',
-      fill: '#fdfafaff',
+      fill: '#ffffff',
       fontStyle: 'bold'
     }).setOrigin(0.5).setAlpha(0);
 
@@ -43,13 +45,54 @@ class CenaTitulo extends Phaser.Scene {
       repeat: -1
     });
 
-    // Transição para o jogo
-    this.input.keyboard.once('keydown-ENTER', () => {
-      this.cameras.main.fadeOut(1000, 0, 0, 0);
-      this.time.delayedCall(1000, () => {
-       // this.audioTitulo.stop();
-        this.scene.start('MeuJogo');
-      });
+    // Som do título (loop)
+    // this.musicaTitulo = this.sound.add('audio2', { loop: true, volume: 0.5 });
+    // this.musicaTitulo.play();
+
+    // ======== CONTROLE DE TECLADO ========
+    this.enterKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
+    this.enterKey.on('down', () => {
+      this.iniciarJogo();
+    });
+
+    // ======== CONTROLE DE TOQUE ========
+    this.input.once('pointerdown', () => {
+      this.iniciarJogo();
+    });
+
+    // ======== OPCIONAL: BOTÃO VISUAL "INICIAR" ========
+    // const botaoIniciar = this.add.text(960, 820, '▶ INICIAR', {
+    //   fontSize: '72px',
+    //   fill: '#FFD700',
+    //   fontFamily: 'Arial Black',
+    //   backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    //   padding: { x: 40, y: 20 }
+    // }).setOrigin(0.5).setInteractive().setDepth(1);
+
+    // botaoIniciar.on('pointerdown', () => {
+    //   this.iniciarJogo();
+    // });
+
+    // botaoIniciar.on('pointerover', () => {
+    //   botaoIniciar.setStyle({ fill: '#FFFFFF' });
+    // });
+
+    // botaoIniciar.on('pointerout', () => {
+    //   botaoIniciar.setStyle({ fill: '#FFD700' });
+    // });
+  }
+
+  iniciarJogo() {
+    // Impede duplo acionamento
+    if (this.jogoIniciado) return;
+    this.jogoIniciado = true;
+
+    // Faz um fade bonito
+    this.cameras.main.fadeOut(1000, 0, 0, 0);
+
+    this.time.delayedCall(1000, () => {
+      //this.musicaTitulo.stop();
+      this.scene.start('MeuJogo');
     });
   }
 }
