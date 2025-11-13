@@ -556,23 +556,25 @@ class MeuJogo extends Phaser.Scene {
       { q: 'Qual é a quarta parte de 100', a: '25'},
     ];
     
-    // controle de game play
+      // controle de game play
 
-     this.input.on('pointerdown', (pointer) => {
-     this.startY = pointer.y;
-    });
+    // Detecta o início do toque
+    this.input.on('pointerdown', (pointer) => {
+    this.startY = pointer.y;
+     });
 
-     this.input.on('pointerup', (pointer) => {
-     const deltaY = pointer.y - this.startY;
-  
-     if (delta > 50) {
-     // deslizou para a direita
-     this.moverCarroDireita();
-    } else if (deltay < -50) {
-    // deslizou para a esquerda
-    this.moverCarroEsquerda();
+    // Detecta o fim do toque
+    this.input.on('pointerup', (pointer) => {
+    const deltaY = pointer.y - this.startY;
+ 
+     if (deltaY < -50) {
+     // deslizou para cima
+     this.moverCarroCima();
+    } else if (deltaY > 50) {
+      // deslizou para baixo
+     this.moverCarroBaixo();
     }
-    });
+     });
 
      this.input.on('wheel', (pointer, gameObjects, deltaX, deltaY) => {
      const minLane = 0; // Faixa de cima
@@ -1252,3 +1254,4 @@ this.hiddenInput.addEventListener('input', () => {
   }
 
 } // FIM DA CENA
+
