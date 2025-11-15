@@ -602,15 +602,18 @@ this.input.on('pointerdown', (pointer) => {
   this.startY = pointer.y;
 });
 
-// TOQUE NA TELA (somente quando toca no canvas)
-this.input.on('pointerdown', (pointer) => {
-    if (pointer.event.target.tagName !== 'CANVAS') return;
-    this.touchingScreen = true;
-});
+this.input.on('pointerup', (pointer) => {
+  const deltaY = pointer.y - this.startY;
+  const minLane = 0;
+  const maxLane = this.carLanes.length - 1;
 
-this.input.on('pointerup', () => {
-    this.touchingScreen = false;
-});
+  if (deltaY < -50) {
+    // deslizou para cima
+    this.currentLane = Math.max(minLane, this.currentLane - 1);
+  } else if (deltaY > 50) {
+    // deslizou para baixo
+    this.currentLane = Math.min(maxLane, this.currentLane + 1);
+  }
 
   // Movimento suave (mesmo tween usado no PC)
   this.tweens.add({
@@ -1352,5 +1355,6 @@ this.novaPergunta = () => {
   }
 
 } // FIM DA CENA
+
 
 
