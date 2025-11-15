@@ -594,6 +594,8 @@ this.input.on('wheel', (pointer, gameObjects, deltaX, deltaY) => {
     duration: 250,
     ease: 'Sine.easeInOut'
   });
+});
+
 
 // --- MOBILE (gesto de deslizar vertical) ---
 this.input.on('pointerdown', (pointer) => {
@@ -620,22 +622,7 @@ this.input.on('pointerup', (pointer) => {
     duration: 250,
     ease: 'Sine.easeInOut'
   });
-
-    // === ENTRADA DE DADOS NO ANDROID ===
-this.campoDados = document.getElementById('campoDados');
-
-if (this.campoDados) {
-  this.campoDados.addEventListener('change', () => {
-    const respostaDigitada = this.campoDados.value;
-    this.campoDados.value = '';
-    this.campoDados.blur(); // fecha o teclado
-
-    // chama a função de verificação do jogo
-    if (this.verificarResposta) {
-      this.verificarResposta(respostaDigitada);
-    }
-  });
-}
+});
 
 
     // Cria um input invisível só para chamar o teclado do Android
@@ -1353,6 +1340,7 @@ this.novaPergunta = () => {
   }
 
 } // FIM DA CENA
+
 
 
 
