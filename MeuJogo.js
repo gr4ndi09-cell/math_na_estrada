@@ -594,8 +594,6 @@ this.input.on('wheel', (pointer, gameObjects, deltaX, deltaY) => {
     duration: 250,
     ease: 'Sine.easeInOut'
   });
-});
-
 
 // --- MOBILE (gesto de deslizar vertical) ---
 this.input.on('pointerdown', (pointer) => {
@@ -1355,6 +1353,7 @@ this.novaPergunta = () => {
   }
 
 } // FIM DA CENA
+
 
 
 
