@@ -619,7 +619,7 @@ this.input.on('pointerup', () => {
     duration: 250,
     ease: 'Sine.easeInOut'
   });
-});
+
     // === ENTRADA DE DADOS NO ANDROID ===
 this.campoDados = document.getElementById('campoDados');
 
@@ -1352,4 +1352,5 @@ this.novaPergunta = () => {
   }
 
 } // FIM DA CENA
+
 
