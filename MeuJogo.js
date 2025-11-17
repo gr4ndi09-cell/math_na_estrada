@@ -1382,13 +1382,13 @@ this.novaPergunta = () => {
     // estático: vem da direita para esquerda
      key = Phaser.Utils.Array.GetRandom(this.tiposEstaticos);
      x = 1920 + 100;
-     velX = -Math.round(this.velocidadePista * 2.1);
+     velX = -Math.round(this.velocidadePista * 1);
 
     } else if (tipo === 2) {
     // dinâmico: um pouco mais rápido
      key = Phaser.Utils.Array.GetRandom(this.tiposDinamicos);
      x = 1920 + 100;
-     velX = -Math.round(this.velocidadePista * 1.4);
+     velX = -Math.round(this.velocidadePista * 1.6);
 
     } else {
     // retro: vem de trás pra frente (pela esquerda)
@@ -1647,5 +1647,6 @@ this.novaPergunta = () => {
     });
     });
   }
+
 
 } //=== FIM DA CENA===
