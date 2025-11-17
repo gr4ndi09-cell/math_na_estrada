@@ -3,75 +3,121 @@ class CenaTitulo extends Phaser.Scene {
     super({ key: 'CenaTitulo' });
   }
 
+  
+
   create() {
 
-     // tecla F - fullscreen
-     this.input.keyboard.on('keydown-F', () => {
+    // --- FULLSCREEN (opcional no PC) ---
+    this.input.keyboard.on('keydown-F', () => {
       if (this.scale.isFullscreen) this.scale.stopFullscreen();
       else this.scale.startFullscreen();
     });
- // ======== FUNDO ANIMADO ========
-    this.bgAnim = this.add.sprite(this.scale.width / 2, this.scale.height / 2, 'bg_loading_anim')
-      .setOrigin(0.5)
-      .setDisplaySize(this.scale.width, this.scale.height)
-      .setDepth(-1);
 
-    this.anims.create({
-      key: 'bg_loop',
-      frames: this.anims.generateFrameNumbers('bg_loading_anim'),
-      frameRate: 0.3,   // mais visível agora
-      repeat: 3      // loop infinito
-    });
+    // ============================
+    //     SEQUÊNCIA DE IMAGENS
+    // ============================
 
-    this.bgAnim.play('bg_loop');
+    this.tituloIndex = 1;
 
-    // ======== TEXTO PISCANTE ========
-    const startText = this.add.text(this.scale.width / 2, this.scale.height * 0.9, 
-      'TOQUE NA TELA OU PRESSIONE ENTER PARA INICIAR', {
-      fontSize: '48px',
-      color: '#fcba05ff',
-      fontStyle: 'bold',
-      stroke: '#000000',
-      strokeThickness: 9,
-      align: 'center'
-    }).setOrigin(0.5);
+    // adiciona primeira imagem
+    this.bgImage = this.add.image(
+      this.scale.width / 2,
+      this.scale.height / 2,
+      `titulo_${this.tituloIndex}`
+    ).setOrigin(0.5)
+     .setDisplaySize(this.scale.width, this.scale.height)
+     .setDepth(-1)
+     .setAlpha(0);
+
+    // começa animação de transição
+    this.animarSequenciaTitulo();
+
+    // ============================
+    // TEXTO PISCANTE "TOQUE PARA INICIAR"
+    // ============================
+
+    const startText = this.add.text(
+      this.scale.width / 2,
+      this.scale.height * 0.9,
+      'TOQUE NA TELA OU PRESSIONE ENTER PARA INICIAR',
+      {
+        fontSize: '48px',
+        color: '#fcba05',
+        fontStyle: 'bold',
+        stroke: '#000',
+        strokeThickness: 8,
+        align: 'center'
+      }
+    ).setOrigin(0.5).setDepth(10);
 
     this.tweens.add({
       targets: startText,
-      alpha: { from: 1, to: 0.3 },
+      alpha: { from: 1, to: 0.2 },
       duration: 1000,
       yoyo: true,
       repeat: -1
     });
 
-    // Som do título (loop)
-    // this.musicaTitulo = this.sound.add('audio2', { loop: true, volume: 0.5 });
-    // this.musicaTitulo.play();
+    // ============================
+    //     CONTROLE DE ENTRADA
+    // ============================
 
-    // ======== CONTROLE DE TECLADO ========
-    this.enterKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
-    this.enterKey.on('down', () => {
-      this.iniciarJogo();
-    });
-
-    // ======== CONTROLE DE TOQUE ========
-    this.input.once('pointerdown', () => {
-      this.iniciarJogo();
-    });
-
-   
+    this.input.keyboard.on('keydown-ENTER', () => this.iniciarJogo());
+    this.input.on('pointerdown', () => this.iniciarJogo());
   }
 
+  // =======================================
+  //     FUNÇÃO DA ANIMAÇÃO DE SEQUÊNCIA
+  // =======================================
+  animarSequenciaTitulo() {
+
+    this.tweens.add({
+      targets: this.bgImage,
+      alpha: 1,
+      duration: 1500,
+      ease: 'Sine.easeInOut',
+      onComplete: () => {
+
+        // após 2s mostrando a imagem, fade-out
+        this.time.delayedCall(5000, () => {
+
+          this.tweens.add({
+            targets: this.bgImage,
+            alpha: 0,
+            duration: 1500,
+            ease: 'Sine.easeInOut',
+
+            onComplete: () => {
+              // troca imagem
+              this.tituloIndex++;
+
+              if (this.tituloIndex > 6) {
+                this.tituloIndex = 1; // reinicia ciclo
+              }
+
+              this.bgImage.setTexture(`titulo_${this.tituloIndex}`);
+
+              // chama próxima imagem
+              this.animarSequenciaTitulo();
+            }
+          });
+
+        });
+
+      }
+    });
+  }
+
+  // ============================
+  //    TROCA PARA A CENA DO JOGO
+  // ============================
   iniciarJogo() {
-    // Impede duplo acionamento
     if (this.jogoIniciado) return;
     this.jogoIniciado = true;
 
-    // Faz um fade bonito
     this.cameras.main.fadeOut(1000, 0, 0, 0);
 
     this.time.delayedCall(1000, () => {
-      //this.musicaTitulo.stop();
       this.scene.start('MeuJogo');
     });
   }

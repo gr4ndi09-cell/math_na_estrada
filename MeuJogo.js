@@ -6,7 +6,217 @@ class MeuJogo extends Phaser.Scene {
     this.motorSound = null; // letiável para o Som do Motor
     this.isAudioEnabled = false; // Permanece para controle de clique inicial
     }
-    // --- FUNÇÕES AUXILIARES DE ESTADO ---
+
+  // ===============================================
+  // === FUNÇÃO: MOSTRAR CRÉDITOS PROFISSIONAIS =====
+  // ===============================================
+mostrarCreditos = () => {
+
+  // ====== CONFIGURAÇÕES GERAIS DE ESTILO ======
+  const corTexto = '#FFFFFF';
+  const corFundo = 0x000000;
+  const corSombra = '#706a6aff';
+  const tamanhoFonte = '46px';
+  const tempoFade = 1000;       // ms (fade-in e fade-out)
+  const tempoRolagem = 15000;  // ms (tempo para os créditos subirem)
+  
+  // ====== FUNDO PRETO EM FADE ======
+  const fundo = this.add.rectangle(
+    this.scale.width / 2,
+    this.scale.height / 2,
+    this.scale.width,
+    this.scale.height,
+    corFundo
+  )
+  .setDepth(900)
+  .setAlpha(0);
+
+  this.tweens.add({
+    targets: fundo,
+    alpha: 1,
+    duration: tempoFade,
+    ease: 'Sine.easeInOut'
+  });
+
+
+  // ====== LOGOS OPCIONAIS ======
+  // Ajuste ou remova se não quiser logos
+  const logoEscola = this.add.image(this.scale.width / 2 - 250, 180, 'logoEscola')
+    .setDisplaySize(260, 130)
+    .setOrigin(0.5)
+    .setDepth(901);
+
+  const logoEvento = this.add.image(this.scale.width / 2 + 250, 180, 'logoEvento')
+    .setDisplaySize(260, 130)
+    .setOrigin(0.5)
+    .setDepth(901);
+
+
+   // ============================================
+   // 🔻 🔻 🔻  AQUI VOCÊ COLOCA O TEXTO DOS CRÉDITOS 🔻 🔻 🔻
+   // ============================================
+   const textoCreditos = `
+   
+   Math na Estrada: dirigindo pelos caminhos da matemática.
+
+
+   FATEC CPS SP - 1º Semestre ADS. 
+
+ 
+   2.  INTEGRANTES PROGRAMADORES.
+
+
+   Alberto Sodré, alberto.santos12@fatec.sp.gov.br   
+
+
+   Arthur vieira, arthur.vieira2@fatec.sp.gov.br  
+
+
+   Felipe Lima, felipe.lima134@fatec.sp.gov.br 
+
+
+   Kauã santos, kaua.santos22@fatec.sp.gov.br  
+
+
+   Nicolas Lemes, nicolas.lemes2@fatec.sp.gov.br 
+
+
+   Samuel Henrique, samuel.silva197@fatec.sp.gov.br 
+
+
+   Recursos utilizados:
+
+ 
+   google Gemini IA, 
+
+ 
+   Open IA Chat GPT:  
+
+ 
+   Edição de sprite sheet: https://www.finalparsec.com/tools/sprite_sheet_maker  
+
+
+   Artes: https://br.freepik.com/  
+
+
+   Artes: https://br.pinterest.com/  
+
+
+   Artes: https://suno.com/home  
+
+   
+   Artes: https://sketchfab.com/feed  
+
+
+   Edição de imagem: https://www.remove.bg/pt-br  
+
+
+   Audio: https://online-audio-converter.com/pt/  
+
+
+   Hospedagem do jogo online: https://github.com/  
+
+
+   Arte e efeitos sonoros: https://pixabay.com/pt/  
+
+
+   Codigo phaser.min.js: https://www.jsdelivr.com/  
+
+
+   Ferramentas de edição e código: M.S visual studio, gnu gimp 3, M.S paint 3d. 
+
+
+   Agradecimentos especiais
+
+
+   Agradecemos de coração a oportunidade
+
+
+   de participar deste evento,
+
+ 
+   a toda equipe organizadora,
+   
+
+   a professora Diana e ao professor Adriano 
+
+
+   por abraçar de verdade o evento, 
+
+
+   e a todos os envolvidos e aos participantes, 
+
+
+   que espero de verdade que curtam jogar o game
+
+
+   tanto quanto nós curtimos construi-lo. 🤩
+   
+
+
+
+
+
+
+   "O MPOSSÍVEL É VENCIDO PELA OUSADIA DE ACREDITAR."
+ 
+   `;
+
+  // ============================================
+  // ====== BLOCO DE TEXTO ======
+  const bloco = this.add.text(
+    this.scale.width / 2,
+    this.scale.height + 2920,   // começa abaixo da tela
+    textoCreditos,
+    {
+      fontSize: tamanhoFonte,
+      fontFamily: 'Arial Black',
+      color: corTexto,
+      align: 'center',
+      wordWrap: { width: this.scale.width - 200 }
+    }
+  )
+  .setOrigin(0.5)
+  .setDepth(902);
+
+  bloco.setShadow(4, 4, corSombra, 6);
+
+
+  // ====== ANIMAÇÃO DE ROLAGEM ======
+  this.tweens.add({
+    targets: bloco,
+    y: -bloco.height,
+    duration: tempoRolagem,
+    ease: 'Linear',
+    onComplete: () => fecharCreditos()
+  });
+
+
+  // ====== FUNÇÃO DE FECHAR (fade-out) ======
+  const fecharCreditos = () => {
+    this.tweens.add({
+      targets: [fundo, bloco, logoEscola, logoEvento],
+      alpha: 0,
+      duration: tempoFade,
+      ease: 'Sine.easeInOut',
+      onComplete: () => {
+        fundo.destroy();
+        bloco.destroy();
+        logoEscola.destroy();
+        logoEvento.destroy();
+      }
+    });
+  };
+
+
+  // ====== TOQUE OU CLIQUE ENCERRA ANTES ======
+ this.time.delayedCall(250, () => {
+  this.input.once('pointerdown', () => fecharCreditos());
+});
+  }
+   // ===============================================
+   // --- FUNÇÕES AUXILIARES DE ESTADO ---
+   // ===============================================
   mudarEstado(novoEstado) {
    this.gameState = novoEstado;
         
@@ -16,6 +226,8 @@ class MeuJogo extends Phaser.Scene {
 
       
       if (this.gameOverGroup) this.gameOverGroup.setVisible(novoEstado === 'GAMEOVER');
+
+      console.log = novoEstado;
         
       if (this.car && this.car.body) {
       this.car.body.enable = isPlaying; 
@@ -51,12 +263,12 @@ class MeuJogo extends Phaser.Scene {
       const centerX = this.scale.width / 2;
       const centerY = this.scale.height / 2;
 
-      const btnRestart = this.add.image(centerX, centerY + 200, 'restart')
+      const btnRestart = this.add.image(centerX - 600, centerY + 250, 'restart')
        .setOrigin(0.5)
        .setInteractive()
        .setDepth(101);
 
-      const btnCreditos = this.add.image(centerX, centerY + 350, 'creditos')
+      const btnCreditos = this.add.image(centerX + 600, centerY + 250, 'creditos')
        .setOrigin(0.5)
         .setInteractive()
         .setDepth(101);
@@ -65,27 +277,7 @@ class MeuJogo extends Phaser.Scene {
 
 
     btnCreditos.on('pointerdown', () => {
-      const overlay = this.add.rectangle(960, 540, 1920, 1080, 0x000000, 0.6)
-      .setDepth(149);
-
-      const creditosImg = this.add.image(960, this.scale.height, 'tela_creditos')
-      .setOrigin(0.5, 0)
-      .setDepth(150)
-      .setScale(0.9);
-
-      const alturaCreditos = 8226;
-      const destinoY = -alturaCreditos + this.scale.height;
-
-      this.tweens.add({
-      targets: creditosImg,
-      y: destinoY,
-      duration: 40000,
-      ease: 'Linear',
-      onComplete: () => {
-      overlay.destroy(); // remove o fundo quando acabar
-      creditosImg.destroy();
-    }
-    });
+      this.mostrarCreditos();
     });
      
     this.gameOverGroup.add(btnRestart);
@@ -96,20 +288,15 @@ class MeuJogo extends Phaser.Scene {
   });
       
   }
-        
-  // toggleHUD = (mostrar) => {
-  //  const alvoAlpha = mostrar ? 1 : 0;
-  //  const targets = [this.hud, this.professor, this.motorista, this.vidaText, this.lousa, this.perguntaText, this.respostaText];
-  //  const validTargets = targets.filter(t => t);
-  //  this.tweens.add({ targets: validTargets, alpha: alvoAlpha, duration: 700, ease: 'Sine.easeInOut' });
-  // };
-      //INICIO DO CREATE
+  // ===============================================
+  //INICIO DO CREATE
+  // ===============================================
   create() {
 
      this.jogoAtivo = true;
      this.score = 0;
 
-     // tecla F - fullscreen
+     //=== tecla F - fullscreen===
      this.input.keyboard.on('keydown-F', () => {
       if (this.scale.isFullscreen) this.scale.stopFullscreen();
       else this.scale.startFullscreen();
@@ -117,19 +304,19 @@ class MeuJogo extends Phaser.Scene {
 
     // === SISTEMA DE PONTUAÇÃO ===
      this.pontuacao = 0;
-     this.meta = 800;
+     this.meta = 1000;
      this.venceu = false;
      this.combo = 0; // acertos consecutivos
      this.tempoSemColisao = 0;
 
        // === HUD DE PONTUAÇÃO ===
 
-    // Fundo da pontuação
+    //=== Fundo da pontuação ===
      this.pontosFundo = this.add.image(960, 80, 'pontos') // centralizado no topo
      .setOrigin(0.5)
      .setDepth(100); // acima da pista e do carro
 
-   // Texto da pontuação sobre o fundo
+   //=== Texto da pontuação sobre o fundo ===
      this.scoreText = this.add.text(960, 80, 'Pontos: 0', {
      fontSize: '40px',
      fontFamily: 'Arial Black',
@@ -141,13 +328,13 @@ class MeuJogo extends Phaser.Scene {
      .setOrigin(0.5)
      .setDepth(101);
 
-     if (UserActivation) {this.sound.play('bgmusic', { volume: 0.4, loop: true })
-      };  //INICIA SOM APOS INTERAÇÃO DO USUARIO
+     if (UserActivation) {this.sound.play('bgmusic', { volume: 0.2, loop: true })
+      };  //=== INICIA SOM APOS INTERAÇÃO DO USUARIO ===
    
     // --- CONFIG INICIAL ---
     this.cameras.main.setBackgroundColor('#87CEEB'); // fallback cor do céu
 
-    // --- FUNDO ---
+    // === FUNDO ===
     if (this.textures.exists('fundo')) {
       const bg = this.add.image(960, 540, 'fundo').setDisplaySize(1920, 1080);
       bg.setDepth(0);
@@ -155,7 +342,7 @@ class MeuJogo extends Phaser.Scene {
       this.add.rectangle(960, 540, 1920, 1080, 0x87CEEB).setOrigin(0.5).setDepth(0);
     }
 
-    // --- ESTRADA (obter dimensões reais) ---
+    // === ESTRADA (obter dimensões reais) ===
     let roadWidth = 1920, roadHeight = 484; // defaults
     if (this.textures.exists('estrada')) {
       try {
@@ -186,18 +373,14 @@ class MeuJogo extends Phaser.Scene {
      } else {
      console.warn('cerca.png não encontrada — ignorando camada de cerca.');
     }
-
-   
-
+     
     // === GRUPO DE OBSTÁCULOS ===
      this.obstaculos = this.physics.add.group();
-
-  
-
+       
     // Tabelas de tipos
       this.tiposEstaticos = ['obs_estatico1', 'obs_estatico2', 'obs_estatico3', 'obs_estatico4'];
       this.tiposDinamicos = ['obs_dinamico1', 'obs_dinamico2', 'obs_dinamico3'];
-      this.tiposRetro = ['obs_retro1', 'obs_retro2', 'obs_retro3'];
+      this.tiposRetro = ['obs_retro1', 'obs_retro2', 'obs_retro3', 'obs_retro4'];
 
     // velocidade da pista — usada pelos obstáculos
       this.velocidadePista = 300;
@@ -208,7 +391,7 @@ class MeuJogo extends Phaser.Scene {
 
     // evento que gera obstáculos de forma periódica
      this.eventoObstaculos = this.time.addEvent({
-     delay: 3300,
+     delay: 2900,
      callback: this.gerarObstaculo,
      callbackScope: this,
      loop: true
@@ -233,7 +416,7 @@ class MeuJogo extends Phaser.Scene {
     }
 
 
-    // --- ESTRADA (tileSprite) ---
+    // === ESTRADA (tileSprite) ===
       if (this.textures.exists('estrada')) {
       this.road = this.add.tileSprite(960, roadY, 1920, roadHeight, 'estrada').setOrigin(0.5).setDepth(5);
       const scaleXroad = 1920 / roadWidth;
@@ -245,22 +428,22 @@ class MeuJogo extends Phaser.Scene {
       this.roadFallbackB = this.add.rectangle(960 + 1920, roadY, 1920, roadHeight, 0x444444).setOrigin(0.5).setDepth(5);
     }
 
-    // --- DEFINIÇÃO DAS COORDENADAS FIXAS DAS FAIXAS (LANES) ---
+    // === DEFINIÇÃO DAS COORDENADAS FIXAS DAS FAIXAS (LANES) ===
     // Y's EXATOS que você precisa: 660, 800, 950
     this.carLanes = [660, 800, 850]; // Índice 0 = topo, 1 = meio, 2 = baixo
 
     this.currentLane = 1; // Começa na faixa do meio (índice 1)
 
 
-    // --- CARRO (Physics Sprite) ---
-     const carX = 650; // Seu X fixo
+    // === CARRO (Physics Sprite) ===
+     const carX = 655; // Seu X fixo
      const carY = this.carLanes[this.currentLane]; // Posição Y é a do centro da Faixa 2 (800)
 
      if (this.textures.exists('carro')) {
       this.car = this.physics.add.sprite(carX, carY, 'carro').setDepth(11).setScale(1.0);
       this.car.body.setAllowGravity(false);
       this.car.setImmovable(true);
-      this.car.body.setSize(this.car.width * 0.6, this.car.height * 0.5, true); // tamanho do hitbox do carro
+      this.car.body.setSize(this.car.width * 0.4, this.car.height * 0.4, true); // tamanho do hitbox do carro
 
     // descobre número de frames
       let carFrameCount = 1;
@@ -280,7 +463,7 @@ class MeuJogo extends Phaser.Scene {
       this.anims.create({
      key: 'dirigir',
      frames: this.anims.generateFrameNumbers('carro', { start: 0, end: Math.max(0, carFrameCount - 1) }),
-     frameRate: 20,
+     frameRate: 50,
      repeat: -1
     });
      
@@ -290,7 +473,7 @@ class MeuJogo extends Phaser.Scene {
       this.car.setImmovable(true);
     }
 
-    // --- COLISÃO COM OBSTÁCULOS (CORRETO) ---
+    // === COLISÃO COM OBSTÁCULOS (CORRETO) ===
      this.physics.add.overlap(this.car, this.obstaculos, (car, obst) => {
       // Verifica se estão na mesma faixa (diferença pequena em Y)
      const mesmaFaixa = Math.abs(car.y - obst.y) < 50;
@@ -431,7 +614,7 @@ class MeuJogo extends Phaser.Scene {
       align: 'center'
     }).setOrigin(0.5).setDepth(23);
 
-    // --- LISTA DE PEERGUNTAS ---
+    // 📜--- LISTA DE PEERGUNTAS ---
     this.perguntas = [
       { q: 'quanto vale, 3 x 3 = ?', a: '9', b: '16', c: '6', d: '99'},
   { q: 'quanto vale, 4 x 4 = ?', a: '16', b: '8', c: '12', d: '20'},
@@ -481,10 +664,11 @@ class MeuJogo extends Phaser.Scene {
   { q: 'Qual probabilidade em % de sair cara em um jogo de cara ou coroa ?', a: '50', b: '100', c: '25', d: '0'},
   { q: 'Qual o valor da área do quadrado de lado 12?', a: '144', b: '48', c: '24', d: '12'},
   { q: 'Quanto é 4 × 7?', a: '28', b: '11', c: '24', d: '32'},
-  { q: 'Um aquário tem dimensões 5x4x3. Qual o volume?', a: '60', b: '12', c: '47', d: '30'},
+  { q: 'Um tanque tem dimensões 5x4x3. Qual o volume do tanque?', a: '60', b: '12', c: '47', d: '30'},
   { q: 'Se um produto custa 120 e aumenta 10%, quanto passa a custar?', a: '132', b: '130', c: '12', d: '120'},
   { q: 'Qual a raiz quadrada de 64?', a: '8', b: '4', c: '16', d: '32'},
   { q: 'Em uma compra de 5 itens, cada um custa 8, qual seria o total?', a: '40', b: '13', c: '45', d: '35'},
+   { q: 'Em uma sala com 20 alunos, 5 tem 16 anos, 8 tem 17 anos e 7 tem 15. Qual a MODA da idade dos alunos?', a: '17', b: '25', c: '15', d: '50'},
   { q: 'Calcule a média de 7, 8 e 9?', a: '8', b: '7', c: '9', d: '24'},
   { q: 'Um retângulo tem perímetro 24 e base 7. Qual a altura?', a: '5', b: '17', c: '14', d: '10'},
   { q: 'Qual a da raiz cúbica de 27?', a: '3', b: '9', c: '6', d: '13.5'},
@@ -623,75 +807,7 @@ this.input.on('pointerup', (pointer) => {
     ease: 'Sine.easeInOut'
   });
 });
-
-
-    // Cria um input invisível só para chamar o teclado do Android
-// this.hiddenInput = document.createElement('input');
-// this.hiddenInput.type = 'number'; // força o teclado numérico
-// this.hiddenInput.style.opacity = 0;
-// this.hiddenInput.style.position = 'absolute';
-// this.hiddenInput.style.pointerEvents = 'none';
-// this.hiddenInput.style.height = '0px';
-// this.hiddenInput.style.width = '0px';
-// document.body.appendChild(this.hiddenInput);
-
-// Captura o valor digitado
-// this.hiddenInput.addEventListener('input', () => {
-//   const valor = this.hiddenInput.value.trim();
-//   if (valor !== '') {
-//     this.processarResposta(valor);
-//     this.hiddenInput.value = ''; // limpa
-//     this.hiddenInput.blur(); // fecha o teclado
-//   }
-// });
-
-// // Cria campo de entrada invisível (teclado nativo)
-// let inputElement = document.createElement('input');
-// inputElement.type = 'number';
-// inputElement.style.position = 'absolute';
-// inputElement.style.top = '-100px'; // fora da tela
-// inputElement.style.opacity = 0;
-// document.body.appendChild(inputElement);
-
-// // Quando precisar pedir a resposta:
-// this.abrirEntradaResposta = () => {
-//   inputElement.value = '';
-//   inputElement.style.top = '50%'; // ativa
-//   inputElement.focus();
-
-//   inputElement.onchange = () => {
-//     const resposta = inputElement.value.trim();
-//     this.verificarResposta(resposta);
-//     inputElement.style.top = '-100px'; // esconde novamente
-//   };
-// }
-// this.input.on('pointerdown', () => {
-//   this.abrirEntradaResposta();
-// })
-
-
-    // permite números, sinal de menos, vírgula, ponto e letras (caso queira respostas com texto)
-    // você pode adaptar para aceitar apenas caracteres desejados
-    // teclado para digitar resposta e Enter/Backspace
-
-    this.input.keyboard.on('keydown', (ev) => {
-    
-     if (!this.perguntaAtiva) return; // só aceita digitação quando há pergunta ativa
-     if (ev.key === 'Backspace') {
-      this.respostaAtual = this.respostaAtual.slice(0, -1);
-    } else if (ev.key === 'Enter') {
-      this.validarResposta(false); // respondeu dentro do tempo
-    } else if (/^[0-9\-.,A-Za-z]$/.test(ev.key)) 
-    
-    {
-    
-      this.respostaAtual += ev.key;
-    }
-      this.respostaText.setText(this.respostaAtual);
-    });
-
-    
-
+  
   // --- FUNÇÃO: toggleHUD (fade in/out) ---
     this.toggleHUD = (mostrar) => {
       const alvoAlpha = mostrar ? 1 : 0;
@@ -706,37 +822,189 @@ this.input.on('pointerup', (pointer) => {
       });
     };
 
-    // inicia HUD invisível
+    //=== inicia HUD invisível===
       this.hud.setAlpha(0);
      this.professor.setAlpha(0);
      this.lousa.setAlpha(0);
      this.perguntaText.setAlpha(0);
      this.respostaText.setAlpha(0);
 
-//      // Referência ao campo oculto
-// this.campoDados = document.getElementById('campoDados');
-
-// // Garante que ele exista
-// if (this.campoDados) {
-//   // Quando o jogador digita algo e pressiona Enter (ou “ok” no teclado Android)
-//   this.campoDados.addEventListener('change', () => {
-//     const resposta = this.campoDados.value;
-//     this.verificarResposta(resposta); // chama a função que valida a resposta
-//     this.campoDados.value = ''; // limpa campo
-//     this.campoDados.blur(); // fecha o teclado
-//   });
-// }
-
-    // --- TEMPORIZADORES e LÓGICA DE PERGUNTAS ---
+    // === TEMPORIZADORES e LÓGICA DE PERGUNTAS ===
      this.tempoResposta = 25000; // 25s para responder
      this.tempoPausa = 7000;    // 6s de pausa entre perguntas
      this.timerPergunta = null;
      this.perguntaAtiva = false;
      this.respostaAtual = '';
+//      this.mostrarPausaAos5s = true;
+//      this.emPausa = false;
+// this.pausasRestantes = 3;
+// this.pausaDuracao = 5000; // duração da pausa (5s)
+// this.tempoPerguntaRestante = 0;
 
-    // função que escolhe e mostra nova pergunta (com múltipla escolha)
-// --- FUNÇÃO DE NOVA PERGUNTA (MULTIPLA ESCOLHA, BOTÕES HORIZONTAIS) ---
+
+// if (this.botaoPausa) {
+//     this.botaoPausa.destroy();
+//     this.botaoPausa = null;
+// }
+
+// // ================= SISTEMA DE PAUSA =================
+
+// // número total de pausas permitidas
+// this.pausasRestantes = 3;
+
+// // flag que indica se o jogo está pausado
+// this.jogoPausado = false;
+
+// // referência ao botão de pausa (para esconder/exibir)
+// this.botaoPausa = null;
+
+// // referência ao timer que ativa o botão nos últimos 5s
+// this.timerAvisoPausa = null;
+
+
+// // --- cria o botão de pausa (imagem + texto por cima) ---
+// this.criarBotaoPausa = (tempoRestante) => {
+
+//     // limpa botões antigos se existirem
+//     if (this.botaoPausa) this.botaoPausa.destroy();
+//     if (this.botaoPausaTexto) this.botaoPausaTexto.destroy();
+
+//     // posição fixa no topo
+//     const x = this.scale.width - 200;
+//     const y = 160;
+
+//     // === IMAGEM DO BOTÃO ===
+//     // substitua 'imgBotaoPausa' pela sua imagem quando tiver
+//     this.botaoPausa = this.add.image(x, y, 'imgBotaoPausa')
+//         .setDisplaySize(160, 160)
+//         .setDepth(200)
+//         .setInteractive({ useHandCursor: true });
+
+//     // === TEXTO (contador) ===
+//     this.botaoPausaTexto = this.add.text(x, y, tempoRestante.toString(), {
+//         fontSize: '48px',
+//         fontFamily: 'Arial Black',
+//         color: '#ffffff',   // << você troca aqui depois
+//     })
+//         .setOrigin(0.5)
+//         .setDepth(201);
+
+//     // --- CLICK ---
+//     this.botaoPausa.on('pointerdown', () => {
+//         if (!this.jogoPausado && this.pausasRestantes > 0) {
+//             this.pausarJogo();
+//         }
+//     });
+// };
+
+
+
+// // --- PAUSAR JOGO ---
+// this.pausarJogo = () => {
+
+//     if (this.emPausa || this.pausasRestantes <= 0) return;
+
+//     this.emPausa = true;
+//     this.pausasRestantes--;
+
+//     // Para física dos objetos sem travar o motor inteiro
+//     this.physics.world.isPaused = true;
+
+//     // Congela os timers da pergunta
+//     this.timerPergunta.paused = true;
+
+//     // Mostra o overlay da pausa
+//     this.overlayPausa.setVisible(true);
+//     this.textoPausa.setVisible(true);
+
+//     // Contagem regressiva visual do botão (opcional)
+//     let restante = 5;
+//     this.textoPausa.setText("PAUSA: " + restante);
+
+//     this.intervaloPausa = this.time.addEvent({
+//         delay: 1000,
+//         repeat: 4,
+//         callback: () => {
+//             restante--;
+//             this.textoPausa.setText("PAUSA: " + restante);
+//         }
+//     });
+
+//     // Ao acabar a pausa
+//     this.time.delayedCall(this.pausaDuracao, () => {
+//         this.physics.world.isPaused = false;
+//         this.timerPergunta.paused = false;
+//         this.overlayPausa.setVisible(false);
+//         this.textoPausa.setVisible(false);
+//         this.emPausa = false;
+//     });
+// };
+
+
+
+
+// // --- RETOMAR ---
+// this.retomarJogo = () => {
+
+//     this.jogoPausado = false;
+
+//     // remove aviso central
+//     if (this.textoPausado) this.textoPausado.destroy();
+
+//     // destrava mundo físico
+//     this.physics.world.timeScale = 1;
+
+//     // retoma timer da pergunta
+//     if (this.timerPergunta) {
+//         this.timerPergunta.paused = false;
+//     }
+
+//     // esconde botão até a próxima contagem final
+//     if (this.botaoPausa) this.botaoPausa.destroy();
+//     if (this.botaoPausaTexto) this.botaoPausaTexto.destroy();
+// };
+
+
+
+// // --- Agendar botão para aparecer faltando 5 segundos ---
+// this.agendarPausa = () => {
+
+//     // cancelar se houver timer residual
+//     if (this.timerAvisoPausa) {
+//         this.timerAvisoPausa.remove();
+//         this.timerAvisoPausa = null;
+//     }
+
+//     // só aparece se tiver pausas disponíveis
+//     if (this.pausasRestantes <= 0) return;
+
+//     // faltam 5s
+//     const delayPara5s = this.tempoResposta - 5000;
+
+//     this.timerAvisoPausa = this.time.delayedCall(delayPara5s, () => {
+//         this.criarBotaoPausa(5);
+
+//         // anima a contagem decrescente
+//         let restante = 5;
+//         this.time.addEvent({
+//             delay: 1000,
+//             repeat: 4,
+//             callback: () => {
+//                 restante--;
+//                 if (this.botaoPausaTexto) {
+//                     this.botaoPausaTexto.setText(restante.toString());
+//                 }
+//             }
+//         });
+
+//     });
+// };
+
+
+
+    //=== função que escolhe e mostra nova pergunta MULTIPLA ESCOLHA, BOTÕES HORIZONTAIS) ===
 this.novaPergunta = () => {
+
   // sorteia uma pergunta válida
   let idx = Phaser.Math.Between(0, this.perguntas.length - 1);
   let attempts = 0;
@@ -752,6 +1020,8 @@ this.novaPergunta = () => {
   this.perguntaText.setText(perguntaAtual.q);
   this.perguntaAtiva = true;
   this.toggleHUD(true);
+  //this.agendarPausa();
+
 
   // limpa botões antigos se existirem
   if (this.opcoesGroup) this.opcoesGroup.clear(true, true);
@@ -776,16 +1046,16 @@ this.novaPergunta = () => {
     // posição horizontal (4 botões centralizados)
     const posX = centerX - (espacamento * 1.5) + (i * espacamento);
     
-  //   const botao = this.add.image(posX, baseY, 'imgBotaoPadrao')
-  // .setDisplaySize(220, 120)
-  // .setInteractive({ useHandCursor: true })
-  // .setDepth(80);
+    const botao = this.add.image(posX, baseY, 'imgBotaoPadrao')
+  .setDisplaySize(130, 75)
+  .setInteractive({ useHandCursor: true })
+  .setDepth(80);
 
     // --- PLACEHOLDER: botão retangular ---
-    const botao = this.add.rectangle(posX, baseY, 130, 75, 0xffffff, 0.25)
-      .setStrokeStyle(4, 0x000000)
-      .setInteractive({ useHandCursor: true })
-      .setDepth(80);
+    // const botao = this.add.rectangle(posX, baseY, 130, 75, 0xffffff, 0.25)
+    //   .setStrokeStyle(4, 0x000000)
+    //   .setInteractive({ useHandCursor: true })
+    //   .setDepth(80);
 
     // --- TEXTO TEMPORÁRIO ---
     const label = this.add.text(posX, baseY, alt.texto, {
@@ -808,8 +1078,8 @@ this.novaPergunta = () => {
     });
 
     // efeito visual de toque
-    botao.on('pointerover', () => botao.setFillStyle(0xffff99, 0.5));
-    botao.on('pointerout', () => botao.setFillStyle(0xffffff, 0.25));
+    // botao.on('pointerover', () => botao.setFillStyle(0xffff99, 0.5));
+    // botao.on('pointerout', () => botao.setFillStyle(0xffffff, 0.25));
   });
 
   // limpa timer anterior
@@ -817,11 +1087,12 @@ this.novaPergunta = () => {
 
   // inicia timer (25s)
   this.timerPergunta = this.time.delayedCall(this.tempoResposta, () => {
+
     this.validarResposta(true); // tempo esgotado
   });
 };
 
-    // finalizar pergunta: chamado após validar resposta (acertou/errou) e inicia pausa de 15s
+    //=== finalizar pergunta: chamado após validar resposta (acertou/errou) e inicia pausa de 15s ===
      this.finalizarPergunta = () => {
     // garante cancelar timer
       if (this.timerPergunta) {
@@ -847,8 +1118,10 @@ this.novaPergunta = () => {
 
      
    // FIM DO CREATE     
-  } 
-  
+  }
+  // =============================================== 
+  //VERIFICA A RESPOSTA
+  // ===============================================
   validarResposta(timedOut = false, respostaTexto = '') {
   if (!this.perguntaAtiva) return;
   this.perguntaAtiva = false;
@@ -1076,7 +1349,9 @@ this.novaPergunta = () => {
 
    // FIM DE VALIDAR RESPOSTA
   }
-  //INICIO DE GERAR OBSTACULO//
+  // ===============================================
+   //INICIO DE GERAR OBSTACULO
+   // ===============================================
   gerarObstaculo() {
      // faixas fixas (ajuste conforme o Y real das lanes do carro)
      this.faixasY = [660, 800, 950];
@@ -1147,7 +1422,9 @@ this.novaPergunta = () => {
    //FIM DE GERAR OBSTACULO//
 
   }
+  // ===============================================
   // TRATAR COLISÃO COM OBSTÁCULO
+  // ===============================================
   tratarColisao(obst) {
 
    this.combo = 0; // perde combo ao colidir
@@ -1161,7 +1438,7 @@ this.novaPergunta = () => {
      if (this.vidaAtual >= 0) {
      this.vidaAtual--;
     }
-     this.invulneravel = true;
+    // this.invulneravel = true;
 
     
 
@@ -1213,9 +1490,35 @@ this.novaPergunta = () => {
 
     this.tempoSemColisao = 0;
 
-  } //FIM DE TRATAR COLISÃO
+  }//FIM DE TRATAR COLISÃO
+  // ===============================================
   //INICIO DE UPDATE//
+  // ===============================================
   update(time, delta) {
+
+    if (this.timerPergunta && this.mostrarPausaAos5s && !this.jogoPausado) {
+
+        const restante = Math.ceil((this.timerPergunta.delay - this.timerPergunta.getElapsed()) / 1000);
+
+        if (restante <= 5) {
+
+            // Criar o botão 1 única vez
+            if (!this.botaoPausa) {
+                this.criarBotaoPausa(restante);
+            } else {
+                // Atualizar a contagem regressiva no botão
+                this.botaoPausa.setText(`PAUSA (${restante})`);
+            }
+
+            // Quando chegar a 0, remove
+            if (restante <= 0) {
+                if (this.botaoPausa) {
+                    this.botaoPausa.destroy();
+                    this.botaoPausa = null;
+                }
+            }
+        }
+    }
 
     if (!this.venceu && !this.invulneravel) {
      this.tempoSemColisao += delta;
@@ -1256,8 +1559,10 @@ this.novaPergunta = () => {
     }
     });
 
-  } // FIM DE UPDATE
+  }// FIM DE UPDATE
+  // ===============================================
   // VERIFICAÇÃO DA META DO JOGO
+  // ===============================================
   verificarMeta() {
    if (this.venceu) return; // evita repetir
 
@@ -1267,7 +1572,9 @@ this.novaPergunta = () => {
   }
   // Exemplo de onde ocorre a verificação da pontuação
   }
+  // ===============================================
   //ATUALIZAÇÃO DE PONTUAÇÃO
+  // ===============================================
   atualizarPontuacao(cor = '#00ff00') {
    // Atualiza o texto
      this.scoreText.setText('Pontos: ' + this.pontuacao);
@@ -1285,7 +1592,9 @@ this.novaPergunta = () => {
      onComplete: () => this.scoreText.setColor(corOriginal)
     });
   }
+  // ===============================================
   //MOSTRA TELA DE VITÓRIA
+  // ===============================================
   mostrarTelaVitoria() {
 
     if (this.vitoriaAtiva) return; // evita múltiplas ativações
@@ -1339,9 +1648,4 @@ this.novaPergunta = () => {
     });
   }
 
-} // FIM DA CENA
-
-
-
-
-
+} //=== FIM DA CENA===

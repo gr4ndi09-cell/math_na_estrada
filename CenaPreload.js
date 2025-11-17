@@ -40,8 +40,8 @@ class CenaPreload extends Phaser.Scene {
     });
 
     // === ASSETS DO JOGO ===
+
     
-    this.load.image('titulo', 'assets/titulo.png');
     this.load.image('fundo', 'assets/fundo.png');
     this.load.image('paisagem', 'assets/faixa.png');
     this.load.image('estrada', 'assets/estrada.png');
@@ -51,18 +51,19 @@ class CenaPreload extends Phaser.Scene {
     this.load.image('gameover_screen', 'assets/gameover_screen.png');
     this.load.image('restart', 'assets/restart.png');
     this.load.image('creditos', 'assets/creditos.png');
-    this.load.image('tela_creditos', 'assets/banner.png');
     this.load.image('vitoria', 'assets/vitoria.png');
     this.load.image('pontos', 'assets/pontos.png');
-    
-
-    this.load.spritesheet('bg_loading_anim', 'assets/bg_loading_anim.png', {
-    frameWidth: 1366,
-    frameHeight: 768
-  });
-
-
-   this.load.spritesheet('carro', 'assets/carro.png', {
+    this.load.image('titulo_1', 'assets/titulo_1.png');
+    this.load.image('titulo_2', 'assets/titulo_2.png');
+    this.load.image('titulo_3', 'assets/titulo_3.png');
+    this.load.image('titulo_4', 'assets/titulo_4.png');
+    this.load.image('titulo_5', 'assets/titulo_5.png');
+    this.load.image('titulo_6', 'assets/titulo_6.png');
+    this.load.image('logoEscola', 'assets/logoEscola.png');
+    this.load.image('logoEvento', 'assets/logoEvento.png');
+    this.load.image('imgBotaoPadrao', 'assets/imgBotaoPadrao.png');
+   
+    this.load.spritesheet('carro', 'assets/carro.png', {
     frameWidth: 476,
     frameHeight: 276
   });
@@ -81,6 +82,8 @@ class CenaPreload extends Phaser.Scene {
     }
     for (let i = 1; i <= 3; i++) {
     this.load.image(`obs_dinamico${i}`, `assets/obstaculos/dinamico${i}.png`);
+    }
+     for (let i = 1; i <= 4; i++) {
     this.load.image(`obs_retro${i}`, `assets/obstaculos/retro${i}.png`);
     }
 
