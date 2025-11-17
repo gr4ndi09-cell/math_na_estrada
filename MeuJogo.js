@@ -279,6 +279,11 @@ mostrarCreditos = () => {
     btnCreditos.on('pointerdown', () => {
       this.mostrarCreditos();
     });
+      // ====== TOQUE OU CLIQUE ENCERRA ANTES ======
+ this.time.delayedCall(250, () => {
+  this.input.once('pointerdown', () => fecharCreditos());
+});
+  }
      
     this.gameOverGroup.add(btnRestart);
     this.gameOverGroup.add(btnCreditos);
@@ -1650,5 +1655,6 @@ this.novaPergunta = () => {
 
 
 } //=== FIM DA CENA===
+
 
 
