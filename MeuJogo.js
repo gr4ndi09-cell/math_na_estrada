@@ -1382,7 +1382,7 @@ this.novaPergunta = () => {
     // estático: vem da direita para esquerda
      key = Phaser.Utils.Array.GetRandom(this.tiposEstaticos);
      x = 1920 + 100;
-     velX = -Math.round(this.velocidadePista * 2.9);
+     velX = -Math.round(this.velocidadePista * 2);
 
     } else if (tipo === 2) {
     // dinâmico: um pouco mais rápido
@@ -1650,4 +1650,5 @@ this.novaPergunta = () => {
 
 
 } //=== FIM DA CENA===
+
 
