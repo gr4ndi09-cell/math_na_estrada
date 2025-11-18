@@ -453,8 +453,8 @@ mostrarCreditos = () => {
       if (img && img.width) {
       
      // TAMANHO DE CADA SPRITE DO CARRO
-     //const fw = 536, fh = 277; // TAMANHO CARRO AMARELO VELHO
-      const fw = 476, fh = 276;
+     //const fw = 461, fh = 277; // TAMANHO CARRO AMARELO VELHO
+      const fw = 461, fh = 276;
       const cols = Math.max(1, Math.floor(img.width / fw));
       const rows = Math.max(1, Math.floor(img.height / fh));
       carFrameCount = cols * rows;
@@ -463,7 +463,7 @@ mostrarCreditos = () => {
       this.anims.create({
      key: 'dirigir',
      frames: this.anims.generateFrameNumbers('carro', { start: 0, end: Math.max(0, carFrameCount - 1) }),
-     frameRate: 50,
+     frameRate: 10,
      repeat: -1
     });
      
@@ -616,7 +616,7 @@ mostrarCreditos = () => {
 
     // 📜--- LISTA DE PEERGUNTAS ---
     this.perguntas = [
-      { q: 'quanto vale, 3 x 3 = ?', a: '9', b: '16', c: '6', d: '99'},
+  { q: 'quanto vale, 3 x 3 = ?', a: '9', b: '16', c: '6', d: '99'},
   { q: 'quanto vale, 4 x 4 = ?', a: '16', b: '8', c: '12', d: '20'},
   { q: 'Quanto vale, 5 x 5 = ?', a: '25', b: '10', c: '20', d: '30'},
   { q: 'Quanto vale, 6 x 6 = ?', a: '36', b: '12', c: '30', d: '42'},
@@ -654,7 +654,7 @@ mostrarCreditos = () => {
   { q: 'Se um ângulo mede 135º, é ( 1 ) agudo, ( 2 ) reto, ou ( 3 ) obtuso?', a: '3', b: '1', c: '2', d: ''},
   { q: 'Quantos segundos tem 3 minutos?', a: '180', b: '60', c: '300', d: '3'},
   { q: 'Se uma camisa custa 50 e tem 20% de desconto, qual o preço final?', a: '40', b: '10', c: '30', d: '45'},
-  { q: 'Qual a fração equivalente a 0,75 ?', a: '1', b: '3/4', c: '1/2', d: '0.75'},
+  { q: 'Qual a fração equivalente a 0,75 ?', a: '3/4', b: '1/16', c: '1/2', d: '75/2'},
   { q: 'Um triângulo retângulo tem catetos 6 e 8. Qual a hipotenusa?', a: '10', b: '14', c: '48', d: '100'},
   { q: 'Qual o número de lados de um hexágono?', a: '6', b: '5', c: '7', d: '8'},
   { q: 'Todo número elevado ao expoente 0 é igual a ?', a: '1', b: '0', c: 'Ele mesmo', d: '10'},
@@ -668,7 +668,7 @@ mostrarCreditos = () => {
   { q: 'Se um produto custa 120 e aumenta 10%, quanto passa a custar?', a: '132', b: '130', c: '12', d: '120'},
   { q: 'Qual a raiz quadrada de 64?', a: '8', b: '4', c: '16', d: '32'},
   { q: 'Em uma compra de 5 itens, cada um custa 8, qual seria o total?', a: '40', b: '13', c: '45', d: '35'},
-   { q: 'Em uma sala com 20 alunos, 5 tem 16 anos, 8 tem 17 anos e 7 tem 15. Qual a MODA da idade dos alunos?', a: '17', b: '25', c: '15', d: '50'},
+  { q: 'Em uma sala com 20 alunos, 5 tem 16 anos, 8 tem 17 anos e 7 tem 15. Qual a MODA da idade dos alunos?', a: '17', b: '25', c: '15', d: '50'},
   { q: 'Calcule a média de 7, 8 e 9?', a: '8', b: '7', c: '9', d: '24'},
   { q: 'Um retângulo tem perímetro 24 e base 7. Qual a altura?', a: '5', b: '17', c: '14', d: '10'},
   { q: 'Qual a da raiz cúbica de 27?', a: '3', b: '9', c: '6', d: '13.5'},
@@ -691,22 +691,22 @@ mostrarCreditos = () => {
   { q: 'Um círculo tem diâmetro 10. Qual o raio?', a: '5', b: '10', c: '20', d: '3,14'},
   { q: 'Qual é o menor número natural?', a: '0', b: '1', c: '-1', d: '2'},
   { q: 'Um PENTÁGONO,é um polígono com quantos lados?', a: '5', b: '6', c: '7', d: '4'},
-  { q: 'Resolva: 2(x - 3) = 8', a: '7', b: '4', c: '5.5', d: '10'},
-  { q: 'Qual a área de um quadrado com lado 11?', a: '121', b: '44', c: '22', d: '11'},
+  { q: 'Qual o valor de X quando 2(x - 3) = 8 ?', a: '7', b: '4', c: '5.5', d: '10'},
+  { q: 'Qual a área de um quadrado com lado 11 ?', a: '121', b: '44', c: '22', d: '11'},
   { q: 'Qual a fração que corresponde a 50% (arredonde)?', a: '1/2', b: '1/3', c: '1/4', d: '1/5'},
   { q: 'Um pacote tem 24 balas e é dividido entre 6 crianças igualmente. Quantas balas cada uma recebe?', a: '4', b: '6', c: '30', d: '144'},
-  { q: 'Qual a raiz quadrada de 100?', a: '10', b: '50', c: '100', d: '20'},
-  { q: 'Qual o valor de 3x se x=4?', a: '12', b: '7', c: '34', d: '4/3'},
-  { q: 'Qual é o número seguinte a 99?', a: '100', b: '98', c: '101', d: '199'},
-  { q: 'Uma loja vendeu 120 produtos em 4 dias. Qual a média diária?', a: '30', b: '120', c: '480', d: '40'},
+  { q: 'Qual a raiz quadrada de 100 ?', a: '10', b: '50', c: '100', d: '20'},
+  { q: 'Qual o valor de 3x se x=4 ?', a: '12', b: '7', c: '34', d: '4/3'},
+  { q: 'Qual é o número seguinte a 99 ?', a: '100', b: '98', c: '101', d: '199'},
+  { q: 'Uma loja vendeu 120 produtos em 4 dias. Qual a média diária ?', a: '30', b: '120', c: '480', d: '40'},
   { q: 'Se aumentarmos 10% em 50, qual o novo valor?', a: '55', b: '50', c: '60', d: '45'},
   { q: 'Uma caixa tem 5 pacotes de arroz. Se 2 pacotes são usados, quantos sobram ?', a: '3', b: '2', c: '5', d: '7'},
   { q: 'Qual o valor do perímetro de um triângulo com lados 6, 7 e 8?', a: '21', b: '168', c: '15', d: '20'},
-  { q: 'Qual o volume de um cubo de aresta 3?', a: '27', b: '9', c: '18', d: '3'},
-  { q: 'Qual é o ângulo complementar de 40º?', a: '50', b: '140', c: '40', d: '90'},
+  { q: 'Qual o volume de um cubo de aresta 3 ?', a: '27', b: '9', c: '18', d: '3'},
+  { q: 'Qual é o ângulo complementar de 40º ?', a: '50', b: '140', c: '40', d: '90'},
   { q: 'Se x + 3 = 10, qual o valor de x?', a: '7', b: '13', c: '10', d: '3'},
-  { q: 'Qual o valor de 5³?', a: '125', b: '15', c: '25', d: '50'},
-  { q: 'Quanto é 100 menos 35?', a: '65', b: '75', c: '135', d: '55'},
+  { q: 'Qual o valor de 5³ ?', a: '125', b: '15', c: '25', d: '50'},
+  { q: 'Quanto é 100 menos 35 ?', a: '65', b: '75', c: '135', d: '55'},
   { q: 'Se um tanque tem 250 e já está com 100, quanto falta para encher?', a: '150', b: '250', c: '100', d: '350'},
   { q: 'Quantos anagramas tem a palavra MATEMÁTICA ?', a: '7', b: '10', c: '151200', d: '3'},
   { q: 'Pedro tem 20 anos e seu irmão caçula nasceu hoje🥰. Com que idade pedro terá o dobro da idade do irmão caçula? ', a: '40', b: '20', c: '30', d: '39'},
@@ -721,14 +721,14 @@ mostrarCreditos = () => {
   { q: 'Quanto vale, 9 - 12 = ?', a: '-3', b: '3', c: '21', d: '-2'},
   { q: 'Quanto é log de 64 na base 8 ? Dica: leia como: Qual o expoente que transforma a base 8 em 64.', a: '2', b: '8', c: '4', d: '16'},
   { q: 'Qual a raiz quadrada de 9 ?', a: '3', b: '81', c: '4.5', d: '18'},
-  { q: 'Quando eu tinha 4 anos a idade do meu irmão era o dobro da minha idade. Hoje meu irmão tem 20 anos, que idade eu tenho hoje?', a: '16', b: '20', c: '10', d: '24'},
+  { q: 'Quando eu tinha 4 anos a idade do meu irmão tinha o dobro da minha idade. Se hoje meu irmão tem 20 anos, qual a minha idade agora?', a: '16', b: '20', c: '10', d: '24'},
   { q: 'Uma compra custa 7,50. Você paga com 10 e a balconista pede 2,50 para facilitar. Quanto de troco você deve receber?', a: '5', b: '2.50', c: '7.50', d: '0'},
   { q: 'O pai de Maria foi passear com 3 filhas: Joana, Sofia e Andrea. Quantas filhas tem o pai de Maria?', a: '4', b: '3', c: '1', d: '5'},
   { q: 'Quanto é log10 ? dica: quando a base for omitida, base = 10).', a: '1', b: '10', c: '0', d: '100'},
   { q: 'Quanto vale x na equação: x/3 + 6 = 10 ?', a: '12', b: '4', c: '24', d: '10'},
   { q: 'Quando pedro nasceu seu pai tinha 33 anos, hoje o pai de Pedro tem 40. qual idade pedro tem hoje ?', a: '7', b: '33', c: '40', d: '10'},
   { q: 'Qual é o inverso de 1/4 ?', a: '4', b: '1/4', c: '-4', d: '0.25'},
-  { q: 'Quando Diana completou 15 anos sua tia tinha o dobro de sua idade. Hoje Diana tem 30 anos, que idade tem hoje a tia de Diana? ', a: '45', b: '30', c: '60', d: '40'},
+  { q: 'Quando Diana completou 15 anos sua tia tinha o dobro de sua idade. Hoje Diana tem 30 anos, que idade tem hoje a tia de Diana? ', a: '60', b: '30', c: '45', d: '40'},
   { q: 'Quanto vale, 2 - 4 = ?', a: '-2', b: '2', c: '6', d: '-6'},
   { q: 'Eu tinha 10 laranjas, vendi 1/2 por 5 cada uma. Quanto recebi?', a: '25', b: '50', c: '10', d: '5'},
   { q: 'Em um Triângulo retângulo, se os catetos medem 6cm e 8cm. Quantos cm mede a Hipotenusa?', a: '10', b: '14', c: '28', d: '100'},
@@ -737,7 +737,7 @@ mostrarCreditos = () => {
   { q: 'Quanto é a divisão do perímetro pelo diâmetro de qualquer circunferência?', a: '3,14', b: '3', c: '6.28', d: '1'},
   { q: 'Quantas partes de 1/4 cabem em 1 inteiro?', a: '4', b: '1', c: '2', d: '8'},
   { q: 'Qual é a quarta parte de 100', a: '25', b: '4', c: '100', d: '50'},
-];
+  ];
     // Ativar tela cheia (somente mobile)
 if (this.sys.game.device.os.android || this.sys.game.device.os.iOS) {
   this.input.once('pointerdown', () => {

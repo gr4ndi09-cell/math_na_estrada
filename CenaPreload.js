@@ -4,9 +4,7 @@ class CenaPreload extends Phaser.Scene {
   }
 
   preload() {
-    // Fundo simples com o título
-    //this.add.image(960, 540, 'titulo').setOrigin(0.5);
-
+  
     // Barra de carregamento
     let progressBox = this.add.graphics();
     let progressBar = this.add.graphics();
@@ -38,9 +36,9 @@ class CenaPreload extends Phaser.Scene {
         this.scene.start('CenaTitulo');
       });
     });
-
+    //=====================================   
     // === ASSETS DO JOGO ===
-
+    //=====================================  
     
     this.load.image('fundo', 'assets/fundo.png');
     this.load.image('paisagem', 'assets/faixa.png');
@@ -64,7 +62,7 @@ class CenaPreload extends Phaser.Scene {
     this.load.image('imgBotaoPadrao', 'assets/imgBotaoPadrao.png');
    
     this.load.spritesheet('carro', 'assets/carro.png', {
-    frameWidth: 476,
+    frameWidth: 461,
     frameHeight: 276
   });
    this.load.spritesheet('professor', 'assets/professor.png', {
@@ -75,8 +73,9 @@ class CenaPreload extends Phaser.Scene {
     frameWidth: 450,
     frameHeight: 450
   });
-        
+    //=====================================    
     // OBSTÁCULOS (10 TIPOS) - Usando suas chaves e nomes confirmados
+    //=====================================
     for (let i = 1; i <= 4; i++) {
     this.load.image(`obs_estatico${i}`, `assets/obstaculos/estatico${i}.png`);
     }
@@ -86,8 +85,9 @@ class CenaPreload extends Phaser.Scene {
      for (let i = 1; i <= 4; i++) {
     this.load.image(`obs_retro${i}`, `assets/obstaculos/retro${i}.png`);
     }
-
-    // ÁUDIOS DE FUNDO E SFX (Sem a lógica de 2s que causava o crash)
+    //=====================================
+    // ÁUDIOS DE FUNDO E SFX 
+    //=====================================
     this.load.audio('bgmusic', ['assets/audio/bgmusic.mp3', 'assets/audio/bgmusic.ogg']);
     this.load.audio('motorsound', ['assets/audio/motorsound.mp3', 'assets/audio/motorsound.ogg']);
     this.load.audio('sfx_acerto', ['assets/audio/sfx_acerto.mp3', 'assets/audio/sfx_acerto.ogg']); 
