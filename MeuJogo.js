@@ -328,7 +328,7 @@ mostrarCreditos = () => {
      .setOrigin(0.5)
      .setDepth(101);
 
-     if (UserActivation) {this.sound.play('bgmusic', { volume: 0.2, loop: true })
+     if (UserActivation) {this.sound.play('bgmusic', { volume: 0.15, loop: true })
       };  //=== INICIA SOM APOS INTERAÇÃO DO USUARIO ===
    
     // --- CONFIG INICIAL ---
@@ -379,8 +379,8 @@ mostrarCreditos = () => {
        
     // Tabelas de tipos
       this.tiposEstaticos = ['obs_estatico1', 'obs_estatico2', 'obs_estatico3', 'obs_estatico4'];
-      this.tiposDinamicos = ['obs_dinamico1', 'obs_dinamico2', 'obs_dinamico3'];
-      this.tiposRetro = ['obs_retro1', 'obs_retro2', 'obs_retro3', 'obs_retro4'];
+      this.tiposDinamicos = ['obs_dinamico1', 'obs_dinamico2', 'obs_dinamico3', 'obs_dinamico4'];
+      this.tiposRetro = ['obs_retro1', 'obs_retro2', 'obs_retro3', 'obs_retro4','obs_retro5'];
 
     // velocidade da pista — usada pelos obstáculos
       this.velocidadePista = 300;
@@ -391,7 +391,7 @@ mostrarCreditos = () => {
 
     // evento que gera obstáculos de forma periódica
      this.eventoObstaculos = this.time.addEvent({
-     delay: 2900,
+     delay: 2500,
      callback: this.gerarObstaculo,
      callbackScope: this,
      loop: true
@@ -430,7 +430,7 @@ mostrarCreditos = () => {
 
     // === DEFINIÇÃO DAS COORDENADAS FIXAS DAS FAIXAS (LANES) ===
     // Y's EXATOS que você precisa: 660, 800, 950
-    this.carLanes = [660, 800, 850]; // Índice 0 = topo, 1 = meio, 2 = baixo
+    this.carLanes = [610, 710, 800]; // Índice 0 = topo, 1 = meio, 2 = baixo
 
     this.currentLane = 1; // Começa na faixa do meio (índice 1)
 
@@ -835,172 +835,6 @@ this.input.on('pointerup', (pointer) => {
      this.timerPergunta = null;
      this.perguntaAtiva = false;
      this.respostaAtual = '';
-//      this.mostrarPausaAos5s = true;
-//      this.emPausa = false;
-// this.pausasRestantes = 3;
-// this.pausaDuracao = 5000; // duração da pausa (5s)
-// this.tempoPerguntaRestante = 0;
-
-
-// if (this.botaoPausa) {
-//     this.botaoPausa.destroy();
-//     this.botaoPausa = null;
-// }
-
-// // ================= SISTEMA DE PAUSA =================
-
-// // número total de pausas permitidas
-// this.pausasRestantes = 3;
-
-// // flag que indica se o jogo está pausado
-// this.jogoPausado = false;
-
-// // referência ao botão de pausa (para esconder/exibir)
-// this.botaoPausa = null;
-
-// // referência ao timer que ativa o botão nos últimos 5s
-// this.timerAvisoPausa = null;
-
-
-// // --- cria o botão de pausa (imagem + texto por cima) ---
-// this.criarBotaoPausa = (tempoRestante) => {
-
-//     // limpa botões antigos se existirem
-//     if (this.botaoPausa) this.botaoPausa.destroy();
-//     if (this.botaoPausaTexto) this.botaoPausaTexto.destroy();
-
-//     // posição fixa no topo
-//     const x = this.scale.width - 200;
-//     const y = 160;
-
-//     // === IMAGEM DO BOTÃO ===
-//     // substitua 'imgBotaoPausa' pela sua imagem quando tiver
-//     this.botaoPausa = this.add.image(x, y, 'imgBotaoPausa')
-//         .setDisplaySize(160, 160)
-//         .setDepth(200)
-//         .setInteractive({ useHandCursor: true });
-
-//     // === TEXTO (contador) ===
-//     this.botaoPausaTexto = this.add.text(x, y, tempoRestante.toString(), {
-//         fontSize: '48px',
-//         fontFamily: 'Arial Black',
-//         color: '#ffffff',   // << você troca aqui depois
-//     })
-//         .setOrigin(0.5)
-//         .setDepth(201);
-
-//     // --- CLICK ---
-//     this.botaoPausa.on('pointerdown', () => {
-//         if (!this.jogoPausado && this.pausasRestantes > 0) {
-//             this.pausarJogo();
-//         }
-//     });
-// };
-
-
-
-// // --- PAUSAR JOGO ---
-// this.pausarJogo = () => {
-
-//     if (this.emPausa || this.pausasRestantes <= 0) return;
-
-//     this.emPausa = true;
-//     this.pausasRestantes--;
-
-//     // Para física dos objetos sem travar o motor inteiro
-//     this.physics.world.isPaused = true;
-
-//     // Congela os timers da pergunta
-//     this.timerPergunta.paused = true;
-
-//     // Mostra o overlay da pausa
-//     this.overlayPausa.setVisible(true);
-//     this.textoPausa.setVisible(true);
-
-//     // Contagem regressiva visual do botão (opcional)
-//     let restante = 5;
-//     this.textoPausa.setText("PAUSA: " + restante);
-
-//     this.intervaloPausa = this.time.addEvent({
-//         delay: 1000,
-//         repeat: 4,
-//         callback: () => {
-//             restante--;
-//             this.textoPausa.setText("PAUSA: " + restante);
-//         }
-//     });
-
-//     // Ao acabar a pausa
-//     this.time.delayedCall(this.pausaDuracao, () => {
-//         this.physics.world.isPaused = false;
-//         this.timerPergunta.paused = false;
-//         this.overlayPausa.setVisible(false);
-//         this.textoPausa.setVisible(false);
-//         this.emPausa = false;
-//     });
-// };
-
-
-
-
-// // --- RETOMAR ---
-// this.retomarJogo = () => {
-
-//     this.jogoPausado = false;
-
-//     // remove aviso central
-//     if (this.textoPausado) this.textoPausado.destroy();
-
-//     // destrava mundo físico
-//     this.physics.world.timeScale = 1;
-
-//     // retoma timer da pergunta
-//     if (this.timerPergunta) {
-//         this.timerPergunta.paused = false;
-//     }
-
-//     // esconde botão até a próxima contagem final
-//     if (this.botaoPausa) this.botaoPausa.destroy();
-//     if (this.botaoPausaTexto) this.botaoPausaTexto.destroy();
-// };
-
-
-
-// // --- Agendar botão para aparecer faltando 5 segundos ---
-// this.agendarPausa = () => {
-
-//     // cancelar se houver timer residual
-//     if (this.timerAvisoPausa) {
-//         this.timerAvisoPausa.remove();
-//         this.timerAvisoPausa = null;
-//     }
-
-//     // só aparece se tiver pausas disponíveis
-//     if (this.pausasRestantes <= 0) return;
-
-//     // faltam 5s
-//     const delayPara5s = this.tempoResposta - 5000;
-
-//     this.timerAvisoPausa = this.time.delayedCall(delayPara5s, () => {
-//         this.criarBotaoPausa(5);
-
-//         // anima a contagem decrescente
-//         let restante = 5;
-//         this.time.addEvent({
-//             delay: 1000,
-//             repeat: 4,
-//             callback: () => {
-//                 restante--;
-//                 if (this.botaoPausaTexto) {
-//                     this.botaoPausaTexto.setText(restante.toString());
-//                 }
-//             }
-//         });
-
-//     });
-// };
-
-
 
     //=== função que escolhe e mostra nova pergunta MULTIPLA ESCOLHA, BOTÕES HORIZONTAIS) ===
 this.novaPergunta = () => {
@@ -1495,30 +1329,6 @@ this.novaPergunta = () => {
   //INICIO DE UPDATE//
   // ===============================================
   update(time, delta) {
-
-    if (this.timerPergunta && this.mostrarPausaAos5s && !this.jogoPausado) {
-
-        const restante = Math.ceil((this.timerPergunta.delay - this.timerPergunta.getElapsed()) / 1000);
-
-        if (restante <= 5) {
-
-            // Criar o botão 1 única vez
-            if (!this.botaoPausa) {
-                this.criarBotaoPausa(restante);
-            } else {
-                // Atualizar a contagem regressiva no botão
-                this.botaoPausa.setText(`PAUSA (${restante})`);
-            }
-
-            // Quando chegar a 0, remove
-            if (restante <= 0) {
-                if (this.botaoPausa) {
-                    this.botaoPausa.destroy();
-                    this.botaoPausa = null;
-                }
-            }
-        }
-    }
 
     if (!this.venceu && !this.invulneravel) {
      this.tempoSemColisao += delta;

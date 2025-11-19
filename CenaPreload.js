@@ -79,10 +79,10 @@ class CenaPreload extends Phaser.Scene {
     for (let i = 1; i <= 4; i++) {
     this.load.image(`obs_estatico${i}`, `assets/obstaculos/estatico${i}.png`);
     }
-    for (let i = 1; i <= 3; i++) {
+    for (let i = 1; i <= 4; i++) {
     this.load.image(`obs_dinamico${i}`, `assets/obstaculos/dinamico${i}.png`);
     }
-     for (let i = 1; i <= 4; i++) {
+     for (let i = 1; i <= 5; i++) {
     this.load.image(`obs_retro${i}`, `assets/obstaculos/retro${i}.png`);
     }
     //=====================================
